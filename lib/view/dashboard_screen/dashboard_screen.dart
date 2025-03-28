@@ -1,0 +1,468 @@
+import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
+import 'package:ut_worx/utils/custom_widgets/custom_graph_card.dart';
+import 'package:ut_worx/utils/custom_widgets/custom_work_summary_table.dart';
+import '../../utils/resposive_design/responsive_layout.dart';
+
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveLayout(builder: (context, responsives) {
+      final appBarHeight = responsives.deviceValue(
+        mobile: 50.0,
+        tablet: 70.0,
+        desktop: 80.0,
+      );
+      return Scaffold(
+        backgroundColor: const Color(0XFFF4F7FE),
+        drawer: const CustomDrawer(),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(appBarHeight),
+          child: ResponsiveLayout(
+            builder: (context, responsive) {
+              // Define responsive values for AppBar
+
+              final searchBarHeight = responsive.deviceValue(
+                mobile: 25.0,
+                tablet: 28.0,
+                desktop: 30.0,
+              );
+
+              final iconSize = responsive.deviceValue(
+                mobile: 20.0,
+                tablet: 22.0,
+                desktop: 25.0,
+              );
+
+              final avatarRadius = responsive.deviceValue(
+                mobile: 14.0,
+                tablet: 15.0,
+                desktop: 16.0,
+              );
+
+              final userNameFontSize = responsive.deviceValue(
+                mobile: 12.0,
+                tablet: 14.0,
+                desktop: 16.0,
+              );
+
+              final appBarPadding = responsive.deviceValue(
+                mobile: 8.0,
+                tablet: 12.0,
+                desktop: 16.0,
+              );
+
+              // Hide username on small screens
+              final showUsername = !responsive.isMobile;
+
+              return Padding(
+                padding: EdgeInsets.all(appBarPadding),
+                child: AppBar(
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  title: SizedBox(
+                    height: searchBarHeight,
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    child: SearchBar(
+                      elevation: WidgetStateProperty.all(0),
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(
+                            color: const Color(0XFFE4E7EC), width: 1),
+                      )),
+                      leading: Icon(Icons.search,
+                          color: Color(0XFF667085), size: iconSize * 0.8),
+                      backgroundColor:
+                          WidgetStateProperty.all(const Color(0XFFF9FAFB)),
+                      hintText: 'Search or type command...',
+                      hintStyle: WidgetStateProperty.all(TextStyle(
+                        color: Color(0XFF667085),
+                        fontSize: responsive.deviceValue(
+                          mobile: 12.0,
+                          tablet: 13.0,
+                          desktop: 14.0,
+                        ),
+                      )),
+                      padding:
+                          WidgetStateProperty.all(EdgeInsets.only(left: 10)),
+                    ),
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.circle_notifications_outlined,
+                        color: Color(0XFF667085),
+                        size: iconSize,
+                      ),
+                      onPressed: () {},
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: responsive.deviceValue(
+                          mobile: 8.0,
+                          tablet: 12.0,
+                          desktop: 16.0,
+                        ),
+                        left: responsive.deviceValue(
+                          mobile: 4.0,
+                          tablet: 8.0,
+                          desktop: 12.0,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:
+                                const AssetImage('assets/images/profile.png'),
+                            radius: avatarRadius,
+                          ),
+                          if (showUsername) ...[
+                            SizedBox(
+                                width: responsive.deviceValue(
+                              mobile: 6.0,
+                              tablet: 8.0,
+                              desktop: 10.0,
+                            )),
+                            Text(
+                              "Emirhan Boruch",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: userNameFontSize,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        body: ResponsiveLayout(
+          builder: (context, responsive) {
+            // Define responsive values
+            final titleFontSize = responsive.deviceValue(
+              mobile: 14.0,
+              tablet: 18.0,
+              desktop: 22.0,
+            );
+
+            final buttonFontSize = responsive.deviceValue(
+              mobile: 9.0,
+              tablet: 12.0,
+              desktop: 14.0,
+            );
+
+            final cardPadding = responsive.deviceValue(
+              mobile: 5.0,
+              tablet: 12.0,
+              desktop: 14.0,
+            );
+
+            final summaryCardFontSize = responsive.deviceValue(
+              mobile: 12.0,
+              tablet: 14.0,
+              desktop: 17.0,
+            );
+
+            final summaryValueFontSize = responsive.deviceValue(
+              mobile: 14.0,
+              tablet: 18.0,
+              desktop: 22.0,
+            );
+
+            final graphHeight = responsive.deviceValue(
+              mobile: 150.0,
+              tablet: 180.0,
+              desktop: 200.0,
+            );
+
+            final bodyPadding = responsive.deviceValue(
+              mobile: 8.0,
+              tablet: 12.0,
+              desktop: 16.0,
+            );
+
+            final buttonSpacing = responsive.deviceValue(
+              mobile: 4.0,
+              tablet: 6.0,
+              desktop: 8.0,
+            );
+
+            final buttonPadding = responsive.deviceValue(
+              mobile: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              tablet: EdgeInsets.symmetric(horizontal: 6, vertical: 9),
+              desktop: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            );
+
+            // Determine if we should use column layout for small screens
+            final useColumnLayout = responsive.isMobile;
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(bodyPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // Header section with work summary and buttons
+                    if (useColumnLayout)
+                      // Mobile layout - stack vertically
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "  Work Summary",
+                            style: TextStyle(
+                                fontSize: titleFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 10),
+                          Wrap(
+                            spacing: buttonSpacing,
+                            runSpacing: buttonSpacing,
+                            children: [
+                              _customButton("Select Date", true,
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                              _customButton("Asset Type", false,
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                              _customButton("View Reports", false,
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                              _customButton("Add Work", false,
+                                  color: Color(0XFF7DBD2C),
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                            ],
+                          ),
+                        ],
+                      )
+                    else
+                      // Tablet/Desktop layout - side by side
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Work Summary",
+                            style: TextStyle(
+                                fontSize: titleFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Row(
+                            children: [
+                              _customButton("Select Date", true,
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                              _customButton("Asset Type", false,
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                              _customButton("View Reports", false,
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                              _customButton("Add Work", false,
+                                  color: Color(0XFF7DBD2C),
+                                  fontSize: buttonFontSize,
+                                  padding: buttonPadding),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                    SizedBox(height: 16),
+
+                    // Summary cards
+                    if (useColumnLayout)
+                      // Mobile layout - stack vertically
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _summaryCard("Task Completed Today", "20",
+                              fontSize: summaryCardFontSize,
+                              valueFontSize: summaryValueFontSize,
+                              padding: cardPadding),
+                          // SizedBox(height: 5),
+                          _summaryCard("Task Pending Schedule", "12",
+                              fontSize: summaryCardFontSize,
+                              valueFontSize: summaryValueFontSize,
+                              padding: cardPadding),
+                          // SizedBox(height: 5),
+                          _summaryCard("Task Pending Approval", "5",
+                              fontSize: summaryCardFontSize,
+                              valueFontSize: summaryValueFontSize,
+                              padding: cardPadding),
+                        ],
+                      )
+                    else
+                      // Tablet/Desktop layout - side by side
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _summaryCard("Task Completed Today", "20",
+                                fontSize: summaryCardFontSize,
+                                valueFontSize: summaryValueFontSize,
+                                padding: cardPadding),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: _summaryCard("Task Pending Schedule", "12",
+                                fontSize: summaryCardFontSize,
+                                valueFontSize: summaryValueFontSize,
+                                padding: cardPadding),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: _summaryCard("Task Pending Approval", "5",
+                                fontSize: summaryCardFontSize,
+                                valueFontSize: summaryValueFontSize,
+                                padding: cardPadding),
+                          ),
+                        ],
+                      ),
+
+                    SizedBox(height: 16),
+
+                    // Graph cards
+                    if (useColumnLayout)
+                      // Mobile layout - stack vertically
+                      Column(
+                        children: [
+                          CustomGraphCard.graphCard("Asset Overview",
+                              fontSize: summaryCardFontSize,
+                              graphHeight: graphHeight,
+                              padding: cardPadding),
+                          SizedBox(height: 10),
+                          CustomGraphCard.graphCard("Spare Part Consumption",
+                              fontSize: summaryCardFontSize,
+                              graphHeight: graphHeight,
+                              padding: cardPadding,
+                              isSecondGraph: true),
+                        ],
+                      )
+                    else
+                      // Tablet/Desktop layout - side by side
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomGraphCard.graphCard("Asset Overview",
+                                fontSize: summaryCardFontSize,
+                                graphHeight: graphHeight,
+                                padding: cardPadding),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: CustomGraphCard.graphCard(
+                                "Spare Part Consumption",
+                                fontSize: summaryCardFontSize,
+                                graphHeight: graphHeight,
+                                padding: cardPadding,
+                                isSecondGraph: true),
+                          ),
+                        ],
+                      ),
+
+                    SizedBox(height: 16),
+
+                    // Work summary table
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height - 400,
+                      child: WorkSummaryTable(responsive: responsive),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    });
+  }
+
+  Widget _customButton(
+    String text,
+    bool? isIcon, {
+    Color color = Colors.white,
+    double? fontSize,
+    EdgeInsetsGeometry? padding,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6),
+          ),
+          backgroundColor: color,
+          padding: padding ??
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        ),
+        onPressed: () {},
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isIcon == true)
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: Icon(Icons.calendar_month_outlined,
+                    color: Color(0XFF667085), size: fontSize),
+              ),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: fontSize ?? 14,
+                fontWeight: FontWeight.w400,
+                color: color == Color(0XFF7DBD2C)
+                    ? Colors.white
+                    : Color(0XFF667085),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _summaryCard(
+    String title,
+    String value, {
+    double? fontSize,
+    double? valueFontSize,
+    double? padding,
+  }) {
+    return Card(
+      color: Colors.white,
+      elevation: 2,
+      child: Padding(
+        padding: EdgeInsets.all(padding ?? 16),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                  fontSize: fontSize ?? 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                  fontSize: valueFontSize ?? 24, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
