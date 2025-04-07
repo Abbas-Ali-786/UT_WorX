@@ -3,6 +3,7 @@ import 'package:ut_worx/models/preliminary_report_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
+import 'package:ut_worx/view/preliminary_report_screen/create_preliminary_report.dart';
 
 class PreliminaryReportScreen extends StatefulWidget {
   const PreliminaryReportScreen({super.key});
@@ -218,7 +219,14 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
                             fontSize: titleFontSize,
                             fontWeight: FontWeight.bold)),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const ReportDialog();
+                          },
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.all(buttonPadding),
                         backgroundColor: Color(0XFF7DBD2C),
