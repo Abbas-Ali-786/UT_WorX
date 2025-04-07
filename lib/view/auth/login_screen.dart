@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:ut_worx/view/dashboard_screen/dashboard_screen.dart';
+import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 
 class LoginScreen extends StatefulWidget {

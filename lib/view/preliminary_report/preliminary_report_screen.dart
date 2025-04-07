@@ -3,7 +3,7 @@ import 'package:ut_worx/models/preliminary_report_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
-import 'package:ut_worx/view/preliminary_report_screen/create_preliminary_report.dart';
+import 'package:ut_worx/view/preliminary_report/create_preliminary_report.dart';
 
 class PreliminaryReportScreen extends StatefulWidget {
   const PreliminaryReportScreen({super.key});
@@ -172,9 +172,9 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
       );
 
       final tableTitle = responsive.deviceValue(
-        mobile: 12.0,
-        tablet: 14.0,
-        desktop: 16.0,
+        mobile: 10.0,
+        tablet: 13.0,
+        desktop: 15.0,
       );
       final tableRowHeight = responsive.deviceValue(
         mobile: 30.0,
@@ -231,6 +231,9 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
                         padding: EdgeInsets.all(buttonPadding),
                         backgroundColor: Color(0XFF7DBD2C),
                         foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       child: Text(
                         'Add Preliminary Report',
@@ -241,96 +244,119 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width,
-                child: Center(
-                  child: Scrollbar(
-                    thumbVisibility: true,
-                    thickness: 8,
-                    radius: const Radius.circular(10),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Scrollbar(
-                        thumbVisibility: true,
-                        thickness: 8,
-                        radius: const Radius.circular(10),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SizedBox(
-                            // width: MediaQuery.sizeOf(context).width,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey.shade300),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: DataTable(
-                                columnSpacing: 20,
-                                horizontalMargin: 15,
-                                headingTextStyle: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: tableTitle),
-                                headingRowColor:
-                                    WidgetStateProperty.all(Color(0XFFE5E7EB)),
-                                dataTextStyle: TextStyle(fontSize: tableTitle),
-                                headingRowHeight: tableRowHeight,
-                                dataRowHeight: tableRowHeight,
-                                columns: const [
-                                  DataColumn(label: Text('Report ID')),
-                                  DataColumn(label: Text('Work Order ID')),
-                                  DataColumn(label: Text('Asset ID')),
-                                  DataColumn(label: Text('Findings')),
-                                  DataColumn(label: Text('Follow Ups Require')),
-                                  DataColumn(label: Text('Created By')),
-                                  DataColumn(label: Text('Status')),
-                                ],
-                                rows: reports
-                                    .map<DataRow>((report) => DataRow(cells: [
-                                          DataCell(Text(report.reportId)),
-                                          DataCell(Text(report.workOrderId)),
-                                          DataCell(Text(report.assetId)),
-                                          DataCell(Text(report.findings)),
-                                          DataCell(
-                                            Transform.scale(
-                                              scale: 0.7,
-                                              child: Switch(
-                                                value: report.followUpsRequired,
-                                                activeTrackColor:
-                                                    Color(0XFF2563EB),
-                                                activeColor: Colors.white,
-                                                onChanged: (value) {
-                                                  toggleFollowUpsRequired(
-                                                      report.reportId);
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                          DataCell(Text(report.createdBy)),
-                                          DataCell(
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 4),
-                                              decoration: BoxDecoration(
-                                                color: _getStatusColor(
-                                                    report.status),
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                              child: Text(
-                                                report.status,
-                                                style: const TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                        ]))
-                                    .toList(),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+              Container(
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                ),
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  thickness: 8,
+                  radius: const Radius.circular(10),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columnSpacing: 20,
+                      horizontalMargin: 15,
+                      headingTextStyle: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: tableTitle),
+                      headingRowColor:
+                          WidgetStateProperty.all(Color(0XFFE5E7EB)),
+                      dataTextStyle: TextStyle(fontSize: tableTitle),
+                      headingRowHeight: tableRowHeight,
+                      dataRowHeight: tableRowHeight,
+                      columns: const [
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'Report ID',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'Work Order ID',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'Asset ID',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'Findings',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'Follow Ups Require',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'Created By',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'Status',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                      ],
+                      rows: reports
+                          .map<DataRow>((report) => DataRow(cells: [
+                                DataCell(Text(report.reportId)),
+                                DataCell(Text(report.workOrderId)),
+                                DataCell(Text(report.assetId)),
+                                DataCell(Text(report.findings)),
+                                DataCell(
+                                  Transform.scale(
+                                    scale: 0.7,
+                                    child: Switch(
+                                      value: report.followUpsRequired,
+                                      activeTrackColor: Color(0XFF2563EB),
+                                      activeColor: Colors.white,
+                                      onChanged: (value) {
+                                        toggleFollowUpsRequired(
+                                            report.reportId);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                DataCell(Text(report.createdBy)),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: _getStatusColor(report.status),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      report.status,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ]))
+                          .toList(),
                     ),
                   ),
                 ),

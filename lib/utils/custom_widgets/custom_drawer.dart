@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
-import 'package:ut_worx/view/dashboard_screen/dashboard_screen.dart';
-import 'package:ut_worx/view/preliminary_report_screen/preliminary_report_screen.dart';
+import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
+import 'package:ut_worx/view/notification_creation/notification_creation_screen.dart';
+import 'package:ut_worx/view/preliminary_report/preliminary_report_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -98,6 +99,15 @@ class CustomDrawer extends StatelessWidget {
                         "Notification Creation",
                         iconSize: iconSize,
                         fontSize: fontSize,
+                        onTapAction: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const NotificationListScreen(),
+                            ),
+                          );
+                        },
                       ),
                       _drawerItem(
                         Icons.calendar_today_outlined,
