@@ -192,6 +192,9 @@ class NotificationTable extends StatelessWidget {
         tablet: 40.0,
         desktop: 50.0,
       );
+
+      final bool usefullLayout = responsive.isTablet || responsive.isDesktop;
+
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -238,88 +241,94 @@ class NotificationTable extends StatelessWidget {
                 thickness: 8,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columnSpacing: 20,
-                    horizontalMargin: 15,
-                    headingTextStyle: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: tableTitle),
-                    headingRowColor: WidgetStateProperty.all(Color(0XFFE5E7EB)),
-                    dataTextStyle: TextStyle(fontSize: tableTitle),
-                    headingRowHeight: tableRowHeight,
-                    dataRowHeight: tableRowHeight,
-                    columns: const [
-                      DataColumn(
-                          label: Expanded(
+                  child: SizedBox(
+                    width: usefullLayout
+                        ? MediaQuery.sizeOf(context).width * 1.3
+                        : 800,
+                    child: DataTable(
+                      columnSpacing: 20,
+                      horizontalMargin: 15,
+                      headingTextStyle: TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: tableTitle),
+                      headingRowColor:
+                          WidgetStateProperty.all(Color(0XFFE5E7EB)),
+                      dataTextStyle: TextStyle(fontSize: tableTitle),
+                      headingRowHeight: tableRowHeight,
+                      dataRowHeight: tableRowHeight,
+                      columns: const [
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'WORK ORDER ID',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'WORK TYPE',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'ASSET ID',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'CREATED BY',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'STATUS',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                        DataColumn(
+                            label: Expanded(
+                                child: Text(
+                          'PRIORITY',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ))),
+                      ],
+                      rows: notificationData.map((data) {
+                        return DataRow(cells: [
+                          DataCell(Text(data.workOrderId)),
+                          DataCell(Text(data.workType)),
+                          DataCell(Text(data.assetId)),
+                          DataCell(Text(data.createdBy)),
+                          DataCell(
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: _getStatusColor(data.status),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               child: Text(
-                        'WORK ORDER ID',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ))),
-                      DataColumn(
-                          label: Expanded(
-                              child: Text(
-                        'WORK TYPE',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ))),
-                      DataColumn(
-                          label: Expanded(
-                              child: Text(
-                        'ASSET ID',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ))),
-                      DataColumn(
-                          label: Expanded(
-                              child: Text(
-                        'CREATED BY',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ))),
-                      DataColumn(
-                          label: Expanded(
-                              child: Text(
-                        'STATUS',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ))),
-                      DataColumn(
-                          label: Expanded(
-                              child: Text(
-                        'PRIORITY',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ))),
-                    ],
-                    rows: notificationData.map((data) {
-                      return DataRow(cells: [
-                        DataCell(Text(data.workOrderId)),
-                        DataCell(Text(data.workType)),
-                        DataCell(Text(data.assetId)),
-                        DataCell(Text(data.createdBy)),
-                        DataCell(
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: _getStatusColor(data.status),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              data.status,
-                              style: const TextStyle(color: Colors.white),
+                                data.status,
+                                style: const TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
-                        DataCell(
-                          Text(
-                            data.priority,
-                            style: TextStyle(
-                                color: _getPriorityColor(data.priority)),
+                          DataCell(
+                            Text(
+                              data.priority,
+                              style: TextStyle(
+                                  color: _getPriorityColor(data.priority)),
+                            ),
                           ),
-                        ),
-                      ]);
-                    }).toList(),
+                        ]);
+                      }).toList(),
+                    ),
                   ),
                 ),
               ),

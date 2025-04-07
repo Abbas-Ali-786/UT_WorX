@@ -198,6 +198,8 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
         tablet: 10.0,
         desktop: 12.0,
       );
+      final bool usefullLayout = responsive.isTablet || responsive.isDesktop;
+
       return Scaffold(
         backgroundColor: const Color(0XFFF4F7FE),
         drawer: const CustomDrawer(),
@@ -258,105 +260,110 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
                   radius: const Radius.circular(10),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columnSpacing: 20,
-                      horizontalMargin: 15,
-                      headingTextStyle: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: tableTitle),
-                      headingRowColor:
-                          WidgetStateProperty.all(Color(0XFFE5E7EB)),
-                      dataTextStyle: TextStyle(fontSize: tableTitle),
-                      headingRowHeight: tableRowHeight,
-                      dataRowHeight: tableRowHeight,
-                      columns: const [
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'Report ID',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'Work Order ID',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'Asset ID',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'Findings',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'Follow Ups Require',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'Created By',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'Status',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                      ],
-                      rows: reports
-                          .map<DataRow>((report) => DataRow(cells: [
-                                DataCell(Text(report.reportId)),
-                                DataCell(Text(report.workOrderId)),
-                                DataCell(Text(report.assetId)),
-                                DataCell(Text(report.findings)),
-                                DataCell(
-                                  Transform.scale(
-                                    scale: 0.7,
-                                    child: Switch(
-                                      value: report.followUpsRequired,
-                                      activeTrackColor: Color(0XFF2563EB),
-                                      activeColor: Colors.white,
-                                      onChanged: (value) {
-                                        toggleFollowUpsRequired(
-                                            report.reportId);
-                                      },
+                    child: SizedBox(
+                      width: usefullLayout
+                          ? MediaQuery.sizeOf(context).width * 1.3
+                          : 900,
+                      child: DataTable(
+                        columnSpacing: 20,
+                        horizontalMargin: 15,
+                        headingTextStyle: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: tableTitle),
+                        headingRowColor:
+                            WidgetStateProperty.all(Color(0XFFE5E7EB)),
+                        dataTextStyle: TextStyle(fontSize: tableTitle),
+                        headingRowHeight: tableRowHeight,
+                        dataRowHeight: tableRowHeight,
+                        columns: const [
+                          DataColumn(
+                              label: Expanded(
+                                  child: Text(
+                            'Report ID',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))),
+                          DataColumn(
+                              label: Expanded(
+                                  child: Text(
+                            'Work Order ID',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))),
+                          DataColumn(
+                              label: Expanded(
+                                  child: Text(
+                            'Asset ID',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))),
+                          DataColumn(
+                              label: Expanded(
+                                  child: Text(
+                            'Findings',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))),
+                          DataColumn(
+                              label: Expanded(
+                                  child: Text(
+                            'Follow Ups Require',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))),
+                          DataColumn(
+                              label: Expanded(
+                                  child: Text(
+                            'Created By',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))),
+                          DataColumn(
+                              label: Expanded(
+                                  child: Text(
+                            'Status',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ))),
+                        ],
+                        rows: reports
+                            .map<DataRow>((report) => DataRow(cells: [
+                                  DataCell(Text(report.reportId)),
+                                  DataCell(Text(report.workOrderId)),
+                                  DataCell(Text(report.assetId)),
+                                  DataCell(Text(report.findings)),
+                                  DataCell(
+                                    Transform.scale(
+                                      scale: 0.7,
+                                      child: Switch(
+                                        value: report.followUpsRequired,
+                                        activeTrackColor: Color(0XFF2563EB),
+                                        activeColor: Colors.white,
+                                        onChanged: (value) {
+                                          toggleFollowUpsRequired(
+                                              report.reportId);
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataCell(Text(report.createdBy)),
-                                DataCell(
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: _getStatusColor(report.status),
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      report.status,
-                                      style:
-                                          const TextStyle(color: Colors.white),
+                                  DataCell(Text(report.createdBy)),
+                                  DataCell(
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: _getStatusColor(report.status),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        report.status,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ]))
-                          .toList(),
+                                ]))
+                            .toList(),
+                      ),
                     ),
                   ),
                 ),
