@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
+import 'package:ut_worx/view/dashboard_screen/dashboard_screen.dart';
+import 'package:ut_worx/view/preliminary_report_screen/preliminary_report_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -36,54 +38,97 @@ class CustomDrawer extends StatelessWidget {
           width: drawerWidth,
           child: Drawer(
             backgroundColor: Colors.white,
-            child: ListView(
-              padding: EdgeInsets.zero,
+            child: Column(
               children: [
-                SizedBox(
+                Container(
                   height: logoHeight + 40,
-                  child: DrawerHeader(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 10.0),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(bottom: BorderSide.none),
+                  ),
+                  child: Center(
                     child: Image.asset(
                       'assets/images/logo.png',
                       height: logoHeight,
                     ),
                   ),
                 ),
+
+                const Divider(
+                  color: Color(0XFFA3AED0),
+                  thickness: 1,
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      _drawerItem(
+                        Icons.dashboard,
+                        "Dashboard",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                        onTapAction: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DashboardScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _drawerItem(
+                        Icons.description_outlined,
+                        "Preliminary Report",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                        onTapAction: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const PreliminaryReportScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _drawerItem(
+                        Icons.create_outlined,
+                        "Notification Creation",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                      ),
+                      _drawerItem(
+                        Icons.calendar_today_outlined,
+                        "Work Scheduling",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                      ),
+                      _drawerItem(
+                        Icons.insert_chart_outlined_outlined,
+                        "Service Report",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                      ),
+                      _drawerItem(
+                        Icons.task_outlined,
+                        "Report Generation",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Add logout item at the bottom
                 _drawerItem(
-                  Icons.dashboard,
-                  "Dashboard",
+                  Icons.logout,
+                  "Logout",
                   iconSize: iconSize,
                   fontSize: fontSize,
                 ),
-                _drawerItem(
-                  Icons.create,
-                  "Work Creation",
-                  iconSize: iconSize,
-                  fontSize: fontSize,
-                ),
-                _drawerItem(
-                  Icons.description_outlined,
-                  "Preliminary Report",
-                  iconSize: iconSize,
-                  fontSize: fontSize,
-                ),
-                _drawerItem(
-                  Icons.calendar_today_outlined,
-                  "Work Scheduling",
-                  iconSize: iconSize,
-                  fontSize: fontSize,
-                ),
-                _drawerItem(
-                  Icons.insert_chart_outlined_outlined,
-                  "Service Report",
-                  iconSize: iconSize,
-                  fontSize: fontSize,
-                ),
-                _drawerItem(
-                  Icons.task_outlined,
-                  "Report Generation",
-                  iconSize: iconSize,
-                  fontSize: fontSize,
-                ),
+                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -97,6 +142,7 @@ class CustomDrawer extends StatelessWidget {
     String title, {
     double? iconSize,
     double? fontSize,
+    VoidCallback? onTapAction,
   }) {
     return ListTile(
       leading: Icon(
@@ -111,7 +157,7 @@ class CustomDrawer extends StatelessWidget {
           color: Color(0XFFA3AED0),
         ),
       ),
-      onTap: () {},
+      onTap: onTapAction ?? () {},
     );
   }
 }

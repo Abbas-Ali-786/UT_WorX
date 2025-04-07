@@ -76,11 +76,21 @@ class _WorkSummaryTableState extends State<WorkSummaryTable> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
+              child: Scrollbar(
+                thumbVisibility: true,
+                thickness: 8,
+                radius: const Radius.circular(10),
                 child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: _buildFullTable(tableFontSize),
+                  scrollDirection: Axis.vertical,
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    thickness: 8,
+                    radius: const Radius.circular(10),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: _buildFullTable(tableFontSize),
+                    ),
+                  ),
                 ),
               ),
             ),
