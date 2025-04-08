@@ -3,6 +3,7 @@ import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/auth/login_screen.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import 'package:ut_worx/view/notification_creation/notification_screen.dart';
+import 'package:ut_worx/view/pms/pms_screen.dart';
 import 'package:ut_worx/view/preliminary_report/preliminary_report_screen.dart';
 import 'package:ut_worx/view/report_generation/report_generation_screen.dart';
 import 'package:ut_worx/view/service_report/service_report_screen.dart';
@@ -166,8 +167,7 @@ class CustomDrawer extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const ReportGeneratorScreen(),
+                              builder: (context) => const PMSScreen(),
                             ),
                           );
                         },

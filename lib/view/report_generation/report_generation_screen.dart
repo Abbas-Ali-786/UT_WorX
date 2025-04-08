@@ -90,9 +90,9 @@ class ReportGenerator extends StatelessWidget {
 
     return ResponsiveLayout(builder: (context, responsive) {
       final titlePadding = responsive.deviceValue(
-        mobile: 8.0,
-        tablet: 10.0,
-        desktop: 12.0,
+        mobile: 20.0,
+        tablet: 20.0,
+        desktop: 20.0,
       );
       final titleFontSize = responsive.deviceValue(
         mobile: 14.0,
@@ -105,9 +105,9 @@ class ReportGenerator extends StatelessWidget {
         desktop: 16.0,
       );
       final buttonPadding = responsive.deviceValue(
-        mobile: 6.0,
-        tablet: 8.0,
-        desktop: 10.0,
+        mobile: 8.0,
+        tablet: 10.0,
+        desktop: 12.0,
       );
       final tableTitle = responsive.deviceValue(
         mobile: 10.0,
@@ -147,7 +147,7 @@ class ReportGenerator extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '   Report Generation',
+                          '  Report Generation',
                           style: TextStyle(
                               fontSize: titleFontSize,
                               fontWeight: FontWeight.bold),
@@ -171,7 +171,6 @@ class ReportGenerator extends StatelessWidget {
                                 color: Color(0XFF7DBD2C),
                                 fontSize: buttonFontSize,
                                 padding: buttonPaddings),
-                            const SizedBox(height: 10),
                           ],
                         ),
                       ],
@@ -180,7 +179,7 @@ class ReportGenerator extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '  Report Generation',
+                          'Report Generation',
                           style: TextStyle(
                               fontSize: titleFontSize,
                               fontWeight: FontWeight.bold),
@@ -201,7 +200,6 @@ class ReportGenerator extends StatelessWidget {
                                 color: Color(0XFF7DBD2C),
                                 fontSize: buttonFontSize,
                                 padding: buttonPaddings),
-                            SizedBox(width: 10)
                           ],
                         ),
                       ],

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:ut_worx/models/notification_data_model.dart';
+import 'package:ut_worx/models/pms_model.dart';
+import 'package:ut_worx/models/work_scheduling_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
-import 'package:ut_worx/view/notification_creation/create_notification.dart';
+import 'package:ut_worx/view/pms/assign_pms_dialog.dart';
+import 'package:ut_worx/view/work_scheduling/create_work_scheduling.dart';
 
-class NotificationListScreen extends StatefulWidget {
-  const NotificationListScreen({super.key});
+class PMSScreen extends StatefulWidget {
+  const PMSScreen({super.key});
 
   @override
-  State<NotificationListScreen> createState() => _NotificationListScreenState();
+  State<PMSScreen> createState() => _PMSScreenState();
 }
 
-class _NotificationListScreenState extends State<NotificationListScreen> {
+class _PMSScreenState extends State<PMSScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(builder: (context, responsives) {
@@ -28,137 +30,80 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
           preferredSize: Size.fromHeight(appBarHeight),
           child: CustomHeader(),
         ),
-        body: const NotificationTable(),
+        body: const PMSTable(),
       );
     });
   }
 }
 
-class NotificationTable extends StatelessWidget {
-  const NotificationTable({super.key});
+class PMSTable extends StatelessWidget {
+  const PMSTable({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<NotificationDataModel> notificationData = [
-      NotificationDataModel(
-        workOrderId: '2563478912',
-        workType: 'Dog Trainer',
-        assetId: '25486',
-        createdBy: 'Andrew',
+    final List<PMSModel> pmsData = [
+      PMSModel(
+        pmOrderId: '487441',
+        asset: 'Adidas',
+        location: 'Syracuse, Connecticut',
+        scheduledDate: '12-02-2025',
         status: 'Completed',
-        priority: 'High',
       ),
-      NotificationDataModel(
-        workOrderId: '2478965123',
-        workType: 'Nursing Assistant',
-        assetId: '47893',
-        createdBy: 'Falcon',
+      PMSModel(
+        pmOrderId: '653518',
+        asset: 'Triazole',
+        location: 'Kent, Utah',
+        scheduledDate: '15-02-2025',
         status: 'Pending',
-        priority: 'Medium',
       ),
-      NotificationDataModel(
-        workOrderId: '5741289634',
-        workType: 'Vice President',
-        assetId: '12478',
-        createdBy: 'Sam',
+      PMSModel(
+        pmOrderId: '651535',
+        asset: 'Adidas',
+        location: 'Lansing, Illinois',
+        scheduledDate: '22-02-2025',
         status: 'Rejected',
-        priority: 'Low',
       ),
-      NotificationDataModel(
-        workOrderId: '8741523698',
-        workType: 'BDR',
-        assetId: '32789',
-        createdBy: 'Falcon',
+      PMSModel(
+        pmOrderId: '558612',
+        asset: 'Sberbank Russia',
+        location: 'Portland, Illinois',
+        scheduledDate: '02-02-2025',
         status: 'OnHold',
-        priority: 'Medium',
       ),
-      NotificationDataModel(
-        workOrderId: '7142589634',
-        workType: 'SDR',
-        assetId: '14789',
-        createdBy: 'Tony',
+      PMSModel(
+        pmOrderId: '558612',
+        asset: 'Microsoft',
+        location: 'Great Falls, Maryland',
+        scheduledDate: '25-02-2025',
         status: 'Pending',
-        priority: 'Low',
       ),
-      NotificationDataModel(
-        workOrderId: '1452452014',
-        workType: 'Product Owner',
-        assetId: '24631',
-        createdBy: 'Paul',
+      PMSModel(
+        pmOrderId: '449003',
+        asset: 'Sberbank Russia',
+        location: 'Lafayette, California',
+        scheduledDate: '12-02-2025',
         status: 'Completed',
-        priority: 'High',
       ),
-      NotificationDataModel(
-        workOrderId: '2498756321',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Baron',
+      PMSModel(
+        pmOrderId: '487441',
+        asset: 'Bitcoin',
+        location: 'Coppell, Virginia',
+        scheduledDate: '01-03-2025',
         status: 'Pending',
-        priority: 'Medium',
       ),
-      NotificationDataModel(
-        workOrderId: '2487569314',
-        workType: 'Account Executive',
-        assetId: '80456',
-        createdBy: 'Falcon',
+      PMSModel(
+        pmOrderId: '487441',
+        asset: 'Bitcoin',
+        location: 'Pasadena, Oklahoma',
+        scheduledDate: '05-03-2025',
         status: 'Rejected',
-        priority: 'Low',
       ),
-      NotificationDataModel(
-        workOrderId: '0147751236',
-        workType: 'BDR',
-        assetId: '40369',
-        createdBy: 'Sam',
+      PMSModel(
+        pmOrderId: '558612',
+        asset: 'Adidas',
+        location: 'Syracuse, Connecticut',
+        scheduledDate: '08-03-2025',
         status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '2540893014',
-        workType: 'Account Executive',
-        assetId: '80456',
-        createdBy: 'Baron',
-        status: 'Pending',
-        priority: 'High',
-      ),
-      NotificationDataModel(
-        workOrderId: '0147751236',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Falcon',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '2498756321',
-        workType: 'Product Owner',
-        assetId: '32789',
-        createdBy: 'Sam',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '7142589634',
-        workType: 'BDR',
-        assetId: '47893',
-        createdBy: 'Paul',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '5741289634',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Andrew',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '2540893014',
-        workType: 'SDR',
-        assetId: '12762',
-        createdBy: 'Tony',
-        status: 'Pending',
-        priority: 'High',
       ),
     ];
 
@@ -206,19 +151,12 @@ class NotificationTable extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Notification Creation',
+                    'Preventive Maintenance Scheduler',
                     style: TextStyle(
                         fontSize: titleFontSize, fontWeight: FontWeight.bold),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const NotificationDialog();
-                        },
-                      );
-                    },
+                    onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
                       backgroundColor: Color(0XFF7DBD2C),
@@ -230,7 +168,7 @@ class NotificationTable extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(buttonPadding),
                       child: Text(
-                        'Create',
+                        'Upload Excel',
                         style: TextStyle(fontSize: buttonFontSize),
                       ),
                     ),
@@ -239,7 +177,7 @@ class NotificationTable extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(16),
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.shade300),
@@ -252,9 +190,8 @@ class NotificationTable extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
-                    width: usefullLayout
-                        ? MediaQuery.sizeOf(context).width * 1.3
-                        : 800,
+                    width:
+                        usefullLayout ? MediaQuery.sizeOf(context).width : 600,
                     child: DataTable(
                       columnSpacing: 20,
                       horizontalMargin: 15,
@@ -269,52 +206,52 @@ class NotificationTable extends StatelessWidget {
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'WORK ORDER ID',
+                          'PM Order ID',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'WORK TYPE',
+                          'Asset',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'ASSET ID',
+                          'Location',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'CREATED BY',
+                          'Scheduled Date',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'STATUS',
+                          'Status',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'PRIORITY',
+                          'Action',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                       ],
-                      rows: notificationData.map((data) {
+                      rows: pmsData.map((data) {
                         return DataRow(cells: [
-                          DataCell(Text(data.workOrderId)),
-                          DataCell(Text(data.workType)),
-                          DataCell(Text(data.assetId)),
-                          DataCell(Text(data.createdBy)),
+                          DataCell(Text(data.pmOrderId)),
+                          DataCell(Text(data.asset)),
+                          DataCell(Text(data.location)),
+                          DataCell(Text(data.scheduledDate)),
                           DataCell(
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -329,13 +266,24 @@ class NotificationTable extends StatelessWidget {
                               ),
                             ),
                           ),
-                          DataCell(
-                            Text(
-                              data.priority,
+                          DataCell(GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const AssignPmsDialog();
+                                },
+                              );
+                            },
+                            child: Text(
+                              'Assign',
                               style: TextStyle(
-                                  color: _getPriorityColor(data.priority)),
+                                color: Color(0XFF0159A1),
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color(0XFF0159A1),
+                              ),
                             ),
-                          ),
+                          )),
                         ]);
                       }).toList(),
                     ),
@@ -361,19 +309,6 @@ class NotificationTable extends StatelessWidget {
         return Colors.blue.shade400;
       default:
         return Colors.grey;
-    }
-  }
-
-  Color _getPriorityColor(String priority) {
-    switch (priority) {
-      case 'High':
-        return Colors.red;
-      case 'Medium':
-        return Colors.orange;
-      case 'Low':
-        return Colors.green;
-      default:
-        return Colors.black;
     }
   }
 }

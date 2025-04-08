@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ut_worx/view/pms/pms_screen.dart';
 import 'package:ut_worx/view/report_generation/report_generation_screen.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ReportGeneratorScreen(),
+      home: PMSScreen(),
     );
   }
 }

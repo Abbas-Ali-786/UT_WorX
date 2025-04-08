@@ -173,9 +173,9 @@ class ServiceReport extends StatelessWidget {
 
     return ResponsiveLayout(builder: (context, responsive) {
       final titlePadding = responsive.deviceValue(
-        mobile: 8.0,
-        tablet: 10.0,
-        desktop: 12.0,
+        mobile: 20.0,
+        tablet: 20.0,
+        desktop: 20.0,
       );
       final titleFontSize = responsive.deviceValue(
         mobile: 14.0,
@@ -188,9 +188,9 @@ class ServiceReport extends StatelessWidget {
         desktop: 16.0,
       );
       final buttonPadding = responsive.deviceValue(
-        mobile: 6.0,
-        tablet: 8.0,
-        desktop: 10.0,
+        mobile: 8.0,
+        tablet: 10.0,
+        desktop: 12.0,
       );
       final tableTitle = responsive.deviceValue(
         mobile: 10.0,
@@ -229,22 +229,24 @@ class ServiceReport extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(buttonPadding),
+                      padding: EdgeInsets.zero,
                       backgroundColor: Color(0XFF7DBD2C),
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
-                      'Add Service Report',
-                      style: TextStyle(fontSize: buttonFontSize),
+                    child: Padding(
+                      padding: EdgeInsets.all(buttonPadding),
+                      child: Text(
+                        'Add Service Report',
+                        style: TextStyle(fontSize: buttonFontSize),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
             Container(
               padding: EdgeInsets.all(16),
               margin: EdgeInsets.all(20),
