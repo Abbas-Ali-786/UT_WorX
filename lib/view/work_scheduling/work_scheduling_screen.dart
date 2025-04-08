@@ -7,14 +7,14 @@ import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/notification_creation/create_notification.dart';
 import 'package:ut_worx/view/work_scheduling/create_work_scheduling.dart';
 
-class WorkScheduling extends StatefulWidget {
-  const WorkScheduling({super.key});
+class WorkSchedulingScreen extends StatefulWidget {
+  const WorkSchedulingScreen({super.key});
 
   @override
-  State<WorkScheduling> createState() => _WorkSchedulingState();
+  State<WorkSchedulingScreen> createState() => _WorkSchedulingScreenState();
 }
 
-class _WorkSchedulingState extends State<WorkScheduling> {
+class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(builder: (context, responsives) {
@@ -182,7 +182,7 @@ class NotificationTable extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Schedule Task',
+                      'Add Schedule Task',
                       style: TextStyle(fontSize: buttonFontSize),
                     ),
                   ),

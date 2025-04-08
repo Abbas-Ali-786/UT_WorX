@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_graph_card.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
-import 'package:ut_worx/utils/custom_widgets/custom_work_summary_table.dart';
+import 'package:ut_worx/view/dashboard/work_summary_table.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 
 class DashboardScreen extends StatefulWidget {
