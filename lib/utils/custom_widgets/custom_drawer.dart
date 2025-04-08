@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
-import 'package:ut_worx/view/notification_creation/notification_creation_screen.dart';
+import 'package:ut_worx/view/notification_creation/notification_screen.dart';
 import 'package:ut_worx/view/preliminary_report/preliminary_report_screen.dart';
 
 class CustomDrawer extends StatelessWidget {

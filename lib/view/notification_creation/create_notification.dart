@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 
-class ReportDialog extends StatefulWidget {
-  const ReportDialog({super.key});
+class NotificationDialog extends StatefulWidget {
+  const NotificationDialog({super.key});
 
   @override
-  State<ReportDialog> createState() => _ReportDialogState();
+  State<NotificationDialog> createState() => _NotificationDialogState();
 }
 
-class _ReportDialogState extends State<ReportDialog> {
+class _NotificationDialogState extends State<NotificationDialog> {
   String id = '52369884';
   String faultObservation = '';
   String findings = '';
@@ -67,14 +67,14 @@ class _ReportDialogState extends State<ReportDialog> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Create Preliminary Report',
+                    'Create Notification',
                     style: TextStyle(
                         fontSize: titleFontSize, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: verticalSpacing * 2),
                   Text(
-                    'ID',
+                    'Work Order Title',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: labelFontSize,
@@ -82,9 +82,8 @@ class _ReportDialogState extends State<ReportDialog> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
-                    initialValue: id,
                     decoration: InputDecoration(
-                      hintText: '52369884',
+                      hintText: 'Please add title',
                       hintStyle: TextStyle(color: Colors.grey),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -110,7 +109,7 @@ class _ReportDialogState extends State<ReportDialog> {
                   ),
                   SizedBox(height: verticalSpacing),
                   Text(
-                    'Fault Observation',
+                    'Description',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: labelFontSize,
@@ -118,9 +117,13 @@ class _ReportDialogState extends State<ReportDialog> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
-                    initialValue: faultObservation,
+                    maxLines: responsive.deviceValue(
+                      mobile: 2,
+                      tablet: 3,
+                      desktop: 3,
+                    ),
                     decoration: InputDecoration(
-                      hintText: 'Please add fault observations',
+                      hintText: 'Please add title',
                       hintStyle: TextStyle(color: Colors.grey),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -146,7 +149,7 @@ class _ReportDialogState extends State<ReportDialog> {
                   ),
                   SizedBox(height: verticalSpacing),
                   Text(
-                    'Findings',
+                    'Asset Selection',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: labelFontSize,
@@ -154,9 +157,8 @@ class _ReportDialogState extends State<ReportDialog> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
-                    initialValue: findings,
                     decoration: InputDecoration(
-                      hintText: 'Please add findings',
+                      hintText: 'Please add title',
                       hintStyle: TextStyle(color: Colors.grey),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -169,47 +171,11 @@ class _ReportDialogState extends State<ReportDialog> {
                         vertical: 8,
                       ),
                     ),
-                    maxLines: responsive.deviceValue(
-                      mobile: 2,
-                      tablet: 3,
-                      desktop: 3,
-                    ),
                     onChanged: (newValue) {
                       setState(() {
                         findings = newValue;
                       });
                     },
-                  ),
-                  SizedBox(height: verticalSpacing),
-                  Text(
-                    'Upload Attachments',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: labelFontSize,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0XFFE5E7EB)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Upload photo/video',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.cloud_upload_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
                   ),
                   SizedBox(height: verticalSpacing),
                   Row(
@@ -235,6 +201,100 @@ class _ReportDialogState extends State<ReportDialog> {
                       ),
                     ],
                   ),
+                  SizedBox(height: verticalSpacing),
+                  Text(
+                    'Upload Attachments',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: labelFontSize,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0XFFE5E7EB)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'Upload',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.cloud_upload_outlined),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: verticalSpacing),
+                  Text(
+                    'Work Category',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: labelFontSize,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0XFFE5E7EB)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'Select',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_drop_down_outlined),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: verticalSpacing),
+                  Text(
+                    'Priority',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: labelFontSize,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0XFFE5E7EB)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'Select',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_drop_down_outlined),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+
                   SizedBox(height: verticalSpacing * 2),
                   // Use column for mobile, row for tablet and desktop
                   responsive.isMobile
@@ -290,7 +350,7 @@ class _ReportDialogState extends State<ReportDialog> {
         ),
       ),
       child: Text(
-        'Save as Draft',
+        'Cancel',
         style: TextStyle(
           fontWeight: FontWeight.w500,
           color: Colors.black,

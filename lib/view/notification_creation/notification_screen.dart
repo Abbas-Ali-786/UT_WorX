@@ -3,6 +3,7 @@ import 'package:ut_worx/models/notification_data_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
+import 'package:ut_worx/view/notification_creation/create_notification.dart';
 
 class NotificationListScreen extends StatefulWidget {
   const NotificationListScreen({super.key});
@@ -210,7 +211,14 @@ class NotificationTable extends StatelessWidget {
                         fontSize: titleFontSize, fontWeight: FontWeight.bold),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const NotificationDialog();
+                        },
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(buttonPadding),
                       backgroundColor: Color(0XFF7DBD2C),
