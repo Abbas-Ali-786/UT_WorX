@@ -4,6 +4,7 @@ import 'package:ut_worx/models/service_report_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
+import 'package:ut_worx/view/service_report/create_service_report.dart';
 
 class ServiceReportScreen extends StatefulWidget {
   const ServiceReportScreen({super.key});
@@ -28,14 +29,14 @@ class _ServiceReportScreenState extends State<ServiceReportScreen> {
           preferredSize: Size.fromHeight(appBarHeight),
           child: CustomHeader(),
         ),
-        body: const NotificationTable(),
+        body: const ServiceReport(),
       );
     });
   }
 }
 
-class NotificationTable extends StatelessWidget {
-  const NotificationTable({super.key});
+class ServiceReport extends StatelessWidget {
+  const ServiceReport({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -220,12 +221,12 @@ class NotificationTable extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return const ServiceReportScreenDialog();
-                      //   },
-                      // );
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const ServiceReportDialog();
+                        },
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(buttonPadding),

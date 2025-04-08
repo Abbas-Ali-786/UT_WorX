@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
+import 'package:ut_worx/view/auth/login_screen.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import 'package:ut_worx/view/notification_creation/notification_screen.dart';
 import 'package:ut_worx/view/preliminary_report/preliminary_report_screen.dart';
+import 'package:ut_worx/view/report_generation/report_generation_screen.dart';
 import 'package:ut_worx/view/service_report/service_report_screen.dart';
 import 'package:ut_worx/view/work_scheduling/work_scheduling_screen.dart';
 
@@ -145,6 +147,30 @@ class CustomDrawer extends StatelessWidget {
                         "Report Generation",
                         iconSize: iconSize,
                         fontSize: fontSize,
+                        onTapAction: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ReportGeneratorScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _drawerItem(
+                        Icons.alarm,
+                        "PMS",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                        onTapAction: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ReportGeneratorScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -156,6 +182,15 @@ class CustomDrawer extends StatelessWidget {
                   "Logout",
                   iconSize: iconSize,
                   fontSize: fontSize,
+                  onTapAction: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  },
                 ),
                 const SizedBox(height: 10),
               ],
