@@ -3,6 +3,7 @@ import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import 'package:ut_worx/view/notification_creation/notification_screen.dart';
 import 'package:ut_worx/view/preliminary_report/preliminary_report_screen.dart';
+import 'package:ut_worx/view/work_scheduling/work_scheduling_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -114,6 +115,14 @@ class CustomDrawer extends StatelessWidget {
                         "Work Scheduling",
                         iconSize: iconSize,
                         fontSize: fontSize,
+                        onTapAction: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WorkScheduling(),
+                            ),
+                          );
+                        },
                       ),
                       _drawerItem(
                         Icons.insert_chart_outlined_outlined,

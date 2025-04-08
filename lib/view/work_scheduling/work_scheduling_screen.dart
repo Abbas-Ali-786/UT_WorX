@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:ut_worx/models/notification_data_model.dart';
+import 'package:ut_worx/models/work_scheduling_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/notification_creation/create_notification.dart';
+import 'package:ut_worx/view/work_scheduling/create_work_scheduling.dart';
 
-class NotificationListScreen extends StatefulWidget {
-  const NotificationListScreen({super.key});
+class WorkScheduling extends StatefulWidget {
+  const WorkScheduling({super.key});
 
   @override
-  State<NotificationListScreen> createState() => _NotificationListScreenState();
+  State<WorkScheduling> createState() => _WorkSchedulingState();
 }
 
-class _NotificationListScreenState extends State<NotificationListScreen> {
+class _WorkSchedulingState extends State<WorkScheduling> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(builder: (context, responsives) {
@@ -39,127 +41,79 @@ class NotificationTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<NotificationDataModel> notificationData = [
-      NotificationDataModel(
-        workOrderId: '2563478912',
-        workType: 'Dog Trainer',
-        assetId: '25486',
-        createdBy: 'Andrew',
-        status: 'Completed',
-        priority: 'High',
-      ),
-      NotificationDataModel(
-        workOrderId: '2478965123',
-        workType: 'Nursing Assistant',
-        assetId: '47893',
-        createdBy: 'Falcon',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '5741289634',
-        workType: 'Vice President',
-        assetId: '12478',
-        createdBy: 'Sam',
-        status: 'Rejected',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '8741523698',
-        workType: 'BDR',
-        assetId: '32789',
-        createdBy: 'Falcon',
-        status: 'OnHold',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '7142589634',
-        workType: 'SDR',
-        assetId: '14789',
-        createdBy: 'Tony',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '1452452014',
-        workType: 'Product Owner',
-        assetId: '24631',
-        createdBy: 'Paul',
-        status: 'Completed',
-        priority: 'High',
-      ),
-      NotificationDataModel(
-        workOrderId: '2498756321',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Baron',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '2487569314',
-        workType: 'Account Executive',
-        assetId: '80456',
-        createdBy: 'Falcon',
-        status: 'Rejected',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '0147751236',
-        workType: 'BDR',
-        assetId: '40369',
-        createdBy: 'Sam',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '2540893014',
-        workType: 'Account Executive',
-        assetId: '80456',
-        createdBy: 'Baron',
-        status: 'Pending',
-        priority: 'High',
-      ),
-      NotificationDataModel(
-        workOrderId: '0147751236',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Falcon',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '2498756321',
-        workType: 'Product Owner',
-        assetId: '32789',
-        createdBy: 'Sam',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '7142589634',
-        workType: 'BDR',
-        assetId: '47893',
-        createdBy: 'Paul',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '5741289634',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Andrew',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '2540893014',
-        workType: 'SDR',
-        assetId: '12762',
-        createdBy: 'Tony',
-        status: 'Pending',
-        priority: 'High',
-      ),
+    final List<WorkSchedulingModel> workScheduling = [
+      WorkSchedulingModel(
+          workOrderId: '5478930124',
+          technicianAssigned: 'Sam',
+          scheduledDate: 12478,
+          estimatedHours: 'Sam',
+          status: 'Completed'),
+      WorkSchedulingModel(
+          workOrderId: '3541278930',
+          technicianAssigned: 'Falcon',
+          scheduledDate: 32789,
+          estimatedHours: 'Falcon',
+          status: 'Pending'),
+      WorkSchedulingModel(
+          workOrderId: '0124789635',
+          technicianAssigned: 'Tony',
+          scheduledDate: 14789,
+          estimatedHours: 'Tony',
+          status: 'Rejected'),
+      WorkSchedulingModel(
+          workOrderId: '5478213695',
+          technicianAssigned: 'Paul',
+          scheduledDate: 24631,
+          estimatedHours: 'Paul',
+          status: 'OnHold'),
+      WorkSchedulingModel(
+          workOrderId: '2458731054',
+          technicianAssigned: 'Baron',
+          scheduledDate: 02483,
+          estimatedHours: 'Baron',
+          status: 'Pending'),
+      WorkSchedulingModel(
+          workOrderId: '9352417890',
+          technicianAssigned: 'Falcon',
+          scheduledDate: 80456,
+          estimatedHours: 'Falcon',
+          status: 'Completed'),
+      WorkSchedulingModel(
+          workOrderId: '5023647891',
+          technicianAssigned: 'Sam',
+          scheduledDate: 40369,
+          estimatedHours: 'Sam',
+          status: 'Pending'),
+      WorkSchedulingModel(
+          workOrderId: '0245318762',
+          technicianAssigned: 'Baron',
+          scheduledDate: 80456,
+          estimatedHours: 'Baron',
+          status: 'Rejected'),
+      WorkSchedulingModel(
+          workOrderId: '4783169524',
+          technicianAssigned: 'Falcon',
+          scheduledDate: 02483,
+          estimatedHours: 'Falcon',
+          status: 'Pending'),
+      WorkSchedulingModel(
+          workOrderId: '2453178326',
+          technicianAssigned: 'Sam',
+          scheduledDate: 32789,
+          estimatedHours: 'Sam',
+          status: 'Pending'),
+      WorkSchedulingModel(
+          workOrderId: '2547361586',
+          technicianAssigned: 'Paul',
+          scheduledDate: 47893,
+          estimatedHours: 'Paul',
+          status: 'Pending'),
+      WorkSchedulingModel(
+          workOrderId: '2543185362',
+          technicianAssigned: 'Tony',
+          scheduledDate: 12762,
+          estimatedHours: 'Tony',
+          status: 'Pending'),
     ];
 
     return ResponsiveLayout(builder: (context, responsive) {
@@ -206,7 +160,7 @@ class NotificationTable extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Notification Creation',
+                    'Scheduled Task',
                     style: TextStyle(
                         fontSize: titleFontSize, fontWeight: FontWeight.bold),
                   ),
@@ -215,7 +169,7 @@ class NotificationTable extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const NotificationDialog();
+                          return const WorkSchedulingDialog();
                         },
                       );
                     },
@@ -228,7 +182,7 @@ class NotificationTable extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Create Notification',
+                      'Schedule Task',
                       style: TextStyle(fontSize: buttonFontSize),
                     ),
                   ),
@@ -250,9 +204,8 @@ class NotificationTable extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
-                    width: usefullLayout
-                        ? MediaQuery.sizeOf(context).width * 1.3
-                        : 800,
+                    width:
+                        usefullLayout ? MediaQuery.sizeOf(context).width : 800,
                     child: DataTable(
                       columnSpacing: 20,
                       horizontalMargin: 15,
@@ -274,21 +227,21 @@ class NotificationTable extends StatelessWidget {
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'WORK TYPE',
+                          'TECHNICIAN ASSIGNED',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'ASSET ID',
+                          'SCHEDULED DATE',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
                         DataColumn(
                             label: Expanded(
                                 child: Text(
-                          'CREATED BY',
+                          'ESTINATED HOURS',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
@@ -299,20 +252,13 @@ class NotificationTable extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'PRIORITY',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
                       ],
-                      rows: notificationData.map((data) {
+                      rows: workScheduling.map((data) {
                         return DataRow(cells: [
                           DataCell(Text(data.workOrderId)),
-                          DataCell(Text(data.workType)),
-                          DataCell(Text(data.assetId)),
-                          DataCell(Text(data.createdBy)),
+                          DataCell(Text(data.technicianAssigned)),
+                          DataCell(Text(data.scheduledDate.toString())),
+                          DataCell(Text(data.estimatedHours)),
                           DataCell(
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -325,13 +271,6 @@ class NotificationTable extends StatelessWidget {
                                 data.status,
                                 style: const TextStyle(color: Colors.white),
                               ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              data.priority,
-                              style: TextStyle(
-                                  color: _getPriorityColor(data.priority)),
                             ),
                           ),
                         ]);

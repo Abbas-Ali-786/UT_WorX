@@ -1,4 +1,4 @@
-class NotificationData {
+class NotificationDataModel {
   final String workOrderId;
   final String workType;
   final String assetId;
@@ -6,7 +6,7 @@ class NotificationData {
   final String status;
   final String priority;
 
-  NotificationData({
+  NotificationDataModel({
     required this.workOrderId,
     required this.workType,
     required this.assetId,
