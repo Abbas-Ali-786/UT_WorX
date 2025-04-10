@@ -13,6 +13,17 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  // Create separate controllers for each scrollable widget
+  final ScrollController _mainScrollController = ScrollController();
+  final ScrollController _tableScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _mainScrollController.dispose();
+    _tableScrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(builder: (context, responsives) {
@@ -89,6 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             final useColumnLayout = responsive.isMobile;
 
             return SingleChildScrollView(
+              controller: _mainScrollController,
               child: Padding(
                 padding: EdgeInsets.all(bodyPadding),
                 child: Column(

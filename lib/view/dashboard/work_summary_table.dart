@@ -14,6 +14,16 @@ class WorkSummaryTable extends StatefulWidget {
 }
 
 class _WorkSummaryTableState extends State<WorkSummaryTable> {
+  final ScrollController _verticalScrollController = ScrollController();
+  final ScrollController _horizontalScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _verticalScrollController.dispose();
+    _horizontalScrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final titleFontSize = widget.responsive.deviceValue(
@@ -78,15 +88,19 @@ class _WorkSummaryTableState extends State<WorkSummaryTable> {
             Expanded(
               child: Scrollbar(
                 thumbVisibility: true,
+                controller: _verticalScrollController,
                 thickness: 8,
                 radius: const Radius.circular(10),
                 child: SingleChildScrollView(
+                  controller: _verticalScrollController,
                   scrollDirection: Axis.vertical,
                   child: Scrollbar(
+                    controller: _horizontalScrollController,
                     thumbVisibility: true,
                     thickness: 8,
                     radius: const Radius.circular(10),
                     child: SingleChildScrollView(
+                      controller: _horizontalScrollController,
                       scrollDirection: Axis.horizontal,
                       child: _buildFullTable(tableFontSize),
                     ),

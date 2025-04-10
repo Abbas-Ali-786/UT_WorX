@@ -1,6 +1,9 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ut_worx/constant/toaster.dart';
+import 'package:ut_worx/resources/firebase_auth_method.dart';
 import 'package:ut_worx/view/auth/signup_screen.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
@@ -15,20 +18,65 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   bool _showError = false;
+  String _errorMessage = '';
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   // Function to handle login attempt
-  void _attemptLogin() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+  Future<void> _attemptLogin() async {
+    try {
+      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+        setState(() {
+          _showError = true;
+          _errorMessage = 'Please fill in all fields';
+        });
+        return;
+      }
+      if (!_emailController.text.isEmail) {
+        setState(() {
+          _showError = true;
+          _errorMessage = 'Please enter your correct email';
+        });
+        return;
+      }
+
+      if (_passwordController.text.length < 6) {
+        setState(() {
+          _showError = true;
+          _errorMessage = 'Password must be at least 6 characters long.';
+        });
+        return;
+      }
+
+      var res = await FirebaseAuthMethods().loginInUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      if (res.toString() == 'success') {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DashboardScreen(),
+          ),
+          (route) => false,
+        ); // Navigate to dashboard screen
+        Toaster.showToast('Login successful');
+      } else {
+        Toaster.showToast('Login failed');
+      }
+    } catch (e) {
+      Toaster.showToast(e.toString());
+    }
   }
 
   @override
@@ -76,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           return Center(
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Container(
                 width: containerWidth,
                 padding: EdgeInsets.all(padding),

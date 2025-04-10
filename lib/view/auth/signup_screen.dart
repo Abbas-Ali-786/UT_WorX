@@ -21,6 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   bool _showError = false;
   String _errorMessage = '';
@@ -31,13 +32,13 @@ class _SignupScreenState extends State<SignupScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   // Function to handle signup attempt
   Future<void> _attemptSignup() async {
     try {
-      // Validate if passwords match
       if (_emailController.text.isEmpty ||
           _passwordController.text.isEmpty ||
           _confirmPasswordController.text.isEmpty) {
@@ -140,6 +141,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
           return Center(
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Container(
                 width: containerWidth,
                 padding: EdgeInsets.all(padding),
