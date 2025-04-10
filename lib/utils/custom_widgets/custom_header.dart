@@ -40,9 +40,9 @@ class _CustomHeaderState extends State<CustomHeader> {
         );
 
         final appBarPadding = responsive.deviceValue(
-          mobile: 8.0,
-          tablet: 12.0,
-          desktop: 16.0,
+          mobile: 6.0,
+          tablet: 10.0,
+          desktop: 14.0,
         );
 
         // Hide username on small screens

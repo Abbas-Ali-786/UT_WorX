@@ -240,7 +240,7 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(buttonPadding),
                         child: Text(
-                          'Add Preliminary Report',
+                          'Add Report',
                           style: TextStyle(fontSize: buttonFontSize),
                         ),
                       ),

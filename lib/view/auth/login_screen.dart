@@ -356,9 +356,9 @@ class _LoginScreenState extends State<LoginScreen> {
               );
 
               final buttonPadding = responsive.deviceValue(
-                mobile: 10.0,
-                tablet: 12.0,
-                desktop: 14.0,
+                mobile: 12.0,
+                tablet: 14.0,
+                desktop: 16.0,
               );
 
               return Container(
@@ -392,9 +392,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       height: responsive.deviceValue(
-                        mobile: 30.0,
-                        tablet: 35.0,
-                        desktop: 40.0,
+                        mobile: 45.0,
+                        tablet: 45.0,
+                        desktop: 45.0,
                       ),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -414,8 +414,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.white,
                             fontSize: responsive.deviceValue(
                               mobile: 12.0,
-                              tablet: 14.0,
-                              desktop: 16.0,
+                              tablet: 12.0,
+                              desktop: 14.0,
                             ),
                           ),
                         ),
