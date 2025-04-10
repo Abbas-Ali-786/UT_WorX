@@ -1,8 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:ut_worx/constant/toaster.dart';
+import 'package:ut_worx/resources/firebase_auth_method.dart';
 import 'package:ut_worx/view/auth/login_screen.dart';
+import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -31,45 +35,64 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   // Function to handle signup attempt
-  void _attemptSignup() {
-    // Validate if passwords match
-    if (_emailController.text.isEmpty ||
-        _passwordController.text.isEmpty ||
-        _confirmPasswordController.text.isEmpty) {
-      setState(() {
-        _showError = true;
-        _errorMessage = 'Please fill in all fields';
-      });
-      return;
-    }
+  Future<void> _attemptSignup() async {
+    try {
+      // Validate if passwords match
+      if (_emailController.text.isEmpty ||
+          _passwordController.text.isEmpty ||
+          _confirmPasswordController.text.isEmpty) {
+        setState(() {
+          _showError = true;
+          _errorMessage = 'Please fill in all fields';
+        });
+        return;
+      }
 
-    if (!_emailController.text.isEmail) {
-      setState(() {
-        _showError = true;
-        _errorMessage = 'Please enter your correct email';
-      });
-      return;
-    }
+      if (!_emailController.text.isEmail) {
+        setState(() {
+          _showError = true;
+          _errorMessage = 'Please enter your correct email';
+        });
+        return;
+      }
 
-    if (_passwordController.text.length < 6) {
-      setState(() {
-        _showError = true;
-        _errorMessage = 'Password must be at least 6 characters long.';
-      });
-      return;
-    }
+      if (_passwordController.text.length < 6) {
+        setState(() {
+          _showError = true;
+          _errorMessage = 'Password must be at least 6 characters long.';
+        });
+        return;
+      }
 
-    if (_passwordController.text != _confirmPasswordController.text) {
-      setState(() {
-        _showError = true;
-        _errorMessage = 'Passwords do not match. Please try again.';
-      });
-      return;
-    }
+      if (_passwordController.text != _confirmPasswordController.text) {
+        setState(() {
+          _showError = true;
+          _errorMessage = 'Passwords do not match. Please try again.';
+        });
+        return;
+      }
 
-    // Navigate to login screen after successful signup
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      // Attempt signup
+      var res = await FirebaseAuthMethods().signUpUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
+      );
+      if (res.toString() == 'success') {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DashboardScreen(),
+          ),
+          (route) => false,
+        );
+        Toaster.showToast('Account created successfully');
+      } else {
+        Toaster.showToast('Error: $res');
+      }
+    } catch (e) {
+      Toaster.showToast('Error: $e');
+    }
   }
 
   @override

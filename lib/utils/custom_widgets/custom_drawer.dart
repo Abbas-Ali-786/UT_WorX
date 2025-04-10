@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ut_worx/resources/firebase_auth_method.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/auth/login_screen.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
@@ -182,7 +183,8 @@ class CustomDrawer extends StatelessWidget {
                   "Logout",
                   iconSize: iconSize,
                   fontSize: fontSize,
-                  onTapAction: () {
+                  onTapAction: () async {
+                    await FirebaseAuthMethods().signOut();
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
