@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:ut_worx/view/auth/signup_screen.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 
@@ -28,9 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void _attemptLogin() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => DashboardScreen()));
-    // setState(() {
-    //   _showError = true;
-    // });
   }
 
   @override
@@ -237,6 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           "Login",
                           style: TextStyle(
                             color: Colors.white,
+                            fontWeight: FontWeight.w600,
                             fontSize: responsive.deviceValue(
                               mobile: 14.0,
                               tablet: 16.0,
@@ -248,25 +247,57 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(
                         height: responsive.deviceValue(
-                      mobile: 8.0,
-                      desktop: 12.0,
+                      mobile: 10.0,
+                      desktop: 14.0,
                     )),
-                    TextButton(
-                      onPressed: () {
-                        _showForgotPasswordDialog();
-                      },
-                      child: Text(
-                        "Forgot Password",
-                        style: TextStyle(
-                          color: Color(0XFF1A71F6),
-                          decoration: TextDecoration.underline,
-                          decorationColor: Color(0XFF1A71F6),
-                          fontSize: responsive.deviceValue(
-                            mobile: 13.0,
-                            desktop: 15.0,
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            _showForgotPasswordDialog();
+                          },
+                          child: Text(
+                            "Forgot Password",
+                            style: TextStyle(
+                              color: Color(0XFF1A71F6),
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Inter',
+                              decoration: TextDecoration.underline,
+                              decorationColor: Color(0XFF1A71F6),
+                              fontSize: responsive.deviceValue(
+                                mobile: 14.0,
+                                desktop: 16.0,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Spacer(),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SignupScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Color(0XFF7DBD2C),
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Inter',
+                              decoration: TextDecoration.underline,
+                              decorationColor: Color(0XFF7DBD2C),
+                              fontSize: responsive.deviceValue(
+                                mobile: 14.0,
+                                desktop: 16.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
 
                     // Error message box - only shown when _showError is true
