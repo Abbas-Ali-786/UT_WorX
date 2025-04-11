@@ -86,21 +86,6 @@ class CustomDrawer extends StatelessWidget {
                         },
                       ),
                       _drawerItem(
-                        Icons.description_outlined,
-                        "Preliminary Report",
-                        iconSize: iconSize,
-                        fontSize: fontSize,
-                        onTapAction: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const PreliminaryReportScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                      _drawerItem(
                         Icons.create_outlined,
                         "Notification Creation",
                         iconSize: iconSize,
@@ -111,6 +96,21 @@ class CustomDrawer extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) =>
                                   const NotificationListScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _drawerItem(
+                        Icons.description_outlined,
+                        "Preliminary Report",
+                        iconSize: iconSize,
+                        fontSize: fontSize,
+                        onTapAction: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const PreliminaryReportScreen(),
                             ),
                           );
                         },
@@ -161,7 +161,7 @@ class CustomDrawer extends StatelessWidget {
                       ),
                       _drawerItem(
                         Icons.alarm,
-                        "PMS",
+                        "PM Scheduler",
                         iconSize: iconSize,
                         fontSize: fontSize,
                         onTapAction: () {

@@ -12,7 +12,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
   String id = '52369884';
   String faultObservation = '';
   String findings = '';
-  bool followUp = false;
+  bool followUp = true;
 
   @override
   Widget build(BuildContext context) {
@@ -178,30 +178,30 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     },
                   ),
                   SizedBox(height: verticalSpacing),
-                  Row(
-                    children: [
-                      Text(
-                        'Follow Up',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: labelFontSize,
-                        ),
-                      ),
-                      const Spacer(),
-                      Checkbox(
-                        value: followUp,
-                        activeColor: Color(0XFF7DBD2C),
-                        onChanged: (bool? newValue) {
-                          setState(() {
-                            if (newValue != null) {
-                              followUp = newValue;
-                            }
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: verticalSpacing),
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //       'Follow Up',
+                  //       style: TextStyle(
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: labelFontSize,
+                  //       ),
+                  //     ),
+                  //     const Spacer(),
+                  //     Checkbox(
+                  //       value: followUp,
+                  //       activeColor: Color(0XFF7DBD2C),
+                  //       onChanged: (bool? newValue) {
+                  //         setState(() {
+                  //           if (newValue != null) {
+                  //             followUp = newValue;
+                  //           }
+                  //         });
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: verticalSpacing),
                   Text(
                     'Upload Attachments',
                     style: TextStyle(
@@ -271,6 +271,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       fontSize: labelFontSize,
                     ),
                   ),
+
                   const SizedBox(height: 5),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -293,6 +294,30 @@ class _NotificationDialogState extends State<NotificationDialog> {
                         ),
                       ],
                     ),
+                  ),
+                  SizedBox(height: verticalSpacing),
+                  Row(
+                    children: [
+                      Text(
+                        'Breakdown/Bypass',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: labelFontSize,
+                        ),
+                      ),
+                      const Spacer(),
+                      Checkbox(
+                        value: followUp,
+                        activeColor: Color(0XFF7DBD2C),
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            if (newValue != null) {
+                              followUp = newValue;
+                            }
+                          });
+                        },
+                      ),
+                    ],
                   ),
 
                   SizedBox(height: verticalSpacing * 2),

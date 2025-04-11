@@ -206,7 +206,7 @@ class NotificationTable extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Notification Creation',
+                    'Notification',
                     style: TextStyle(
                         fontSize: titleFontSize, fontWeight: FontWeight.bold),
                   ),
@@ -230,7 +230,7 @@ class NotificationTable extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(buttonPadding),
                       child: Text(
-                        'Create',
+                        'Create Notification',
                         style: TextStyle(fontSize: buttonFontSize),
                       ),
                     ),

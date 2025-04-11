@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _screens = const [
     DashboardScreen(),
-    PreliminaryReportScreen(),
     NotificationListScreen(),
+    PreliminaryReportScreen(),
     WorkSchedulingScreen(),
     ServiceReportScreen(),
     ReportGeneratorScreen(),
