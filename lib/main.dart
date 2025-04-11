@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ut_worx/view/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
+import 'package:ut_worx/view/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +24,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'UT WorX',
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
               return const CircularProgressIndicator();
             case ConnectionState.active:
               if (snapshot.hasData) {
-                return DashboardScreen();
+                return HomePage();
               } else {
                 return LoginScreen();
               }

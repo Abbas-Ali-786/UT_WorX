@@ -24,10 +24,10 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
       return Scaffold(
         backgroundColor: const Color(0XFFF4F7FE),
         drawer: const CustomDrawer(),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(appBarHeight),
-          child: CustomHeader(),
-        ),
+        // appBar: PreferredSize(
+        //   preferredSize: Size.fromHeight(appBarHeight),
+        //   child: CustomHeader(),
+        // ),
         body: const NotificationTable(),
       );
     });
