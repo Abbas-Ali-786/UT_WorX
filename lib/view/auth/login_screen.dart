@@ -313,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           desktop: 14.0,
                         )),
                         Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextButton(
                               onPressed: () {
@@ -334,31 +334,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            Spacer(),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SignupScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  color: Color(0XFF7DBD2C),
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Inter',
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: Color(0XFF7DBD2C),
-                                  fontSize: responsive.deviceValue(
-                                    mobile: 14.0,
-                                    desktop: 16.0,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // Spacer(),
+                            // TextButton(
+                            //   onPressed: () {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) => SignupScreen(),
+                            //       ),
+                            //     );
+                            //   },
+                            //   child: Text(
+                            //     "Sign Up",
+                            //     style: TextStyle(
+                            //       color: Color(0XFF7DBD2C),
+                            //       fontWeight: FontWeight.w600,
+                            //       fontFamily: 'Inter',
+                            //       decoration: TextDecoration.underline,
+                            //       decorationColor: Color(0XFF7DBD2C),
+                            //       fontSize: responsive.deviceValue(
+                            //         mobile: 14.0,
+                            //         desktop: 16.0,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
 

@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -42,6 +45,10 @@ class FirebaseAuthMethods {
   }) async {
     String res = "Some error Occurred";
     try {
+      // Uuid uuid = Uuid();
+      // String userId = uuid.v1();
+      // log(userId);
+
       if (email.isNotEmpty || password.isNotEmpty) {
         // logging in user with email and password
         UserCredential userCredential = await _auth.signInWithEmailAndPassword(

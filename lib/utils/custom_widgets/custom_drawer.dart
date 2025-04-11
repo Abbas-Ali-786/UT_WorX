@@ -36,7 +36,7 @@ class CustomDrawer extends StatelessWidget {
         );
 
         final drawerWidth = responsive.deviceValue(
-          mobile: 240.0,
+          mobile: 220.0,
           tablet: 260.0,
           desktop: 280.0,
         );
