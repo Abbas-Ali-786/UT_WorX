@@ -14,4 +14,28 @@ class NotificationDataModel {
     required this.status,
     required this.priority,
   });
+
+  // Firebase سے ڈیٹا حاصل کرنے کے لیے
+  factory NotificationDataModel.fromJson(Map<String, dynamic> json) {
+    return NotificationDataModel(
+      workOrderId: json['workOrderId'] ?? '',
+      workType: json['workType'] ?? '',
+      assetId: json['assetId'] ?? '',
+      createdBy: json['createdBy'] ?? '',
+      status: json['status'] ?? '',
+      priority: json['priority'] ?? '',
+    );
+  }
+
+  // Firebase میں ڈیٹا بھیجنے کے لیے
+  Map<String, dynamic> toJson() {
+    return {
+      'workOrderId': workOrderId,
+      'workType': workType,
+      'assetId': assetId,
+      'createdBy': createdBy,
+      'status': status,
+      'priority': priority,
+    };
+  }
 }
