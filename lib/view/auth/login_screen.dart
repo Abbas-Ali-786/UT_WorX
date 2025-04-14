@@ -187,6 +187,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 5),
                         TextField(
+                          autofillHints: [AutofillHints.email],
+                          keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
                           cursorColor: Color(0XFF7DBD2C),
                           decoration: InputDecoration(
@@ -236,6 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 5),
                         TextField(
+                          autofillHints: [AutofillHints.password],
                           controller: _passwordController,
                           obscureText: true,
                           cursorColor: Color(0XFF7DBD2C),
