@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
+import 'package:ut_worx/models/user_model.dart';
 
 class FirebaseAuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -39,31 +38,37 @@ class FirebaseAuthMethods {
   }
 
   // logging in user
-  Future<String> loginInUser({
+  Future<User?> loginInUser({
     required String email,
     required String password,
   }) async {
-    String res = "Some error Occurred";
     try {
-      // Uuid uuid = Uuid();
-      // String userId = uuid.v1();
-      // log(userId);
-
-      if (email.isNotEmpty || password.isNotEmpty) {
-        // logging in user with email and password
-        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        res = "success";
-      } else {
-        res = "Please enter all the fields";
-      }
-    } catch (err) {
-      return err.toString();
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      // Handle specific Firebase Auth errors (optional but recommended)
+      debugPrint('Firebase Auth Error: ${e.code} - ${e.message}');
+      return null; // Return null on failure
+    } catch (e) {
+      debugPrint('General Login Error: $e');
+      return null; // Return null on failure
     }
-    return res;
+  }
+
+  Future<UserModel?> getUserDetails(String uid) async {
+    try {
+      var userDoc = await _firestore.collection('Users').doc(uid).get();
+      if (userDoc.exists) {
+        return UserModel.fromJson(userDoc.data()!);
+      }
+      return null;
+    } catch (e) {
+      debugPrint("Error fetching user details: $e");
+      return null;
+    }
   }
 
 // reset password

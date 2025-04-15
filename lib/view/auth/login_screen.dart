@@ -1,11 +1,12 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:ut_worx/constant/toaster.dart';
+import 'package:ut_worx/models/user_model.dart';
 import 'package:ut_worx/resources/firebase_auth_method.dart';
-import 'package:ut_worx/view/auth/signup_screen.dart';
-import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import 'package:ut_worx/view/home_page.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 
@@ -22,7 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final ScrollController _scrollController = ScrollController();
 
   bool _showError = false;
-  String _errorMessage = '';
 
   @override
   void dispose() {
@@ -34,49 +34,91 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Function to handle login attempt
   Future<void> _attemptLogin() async {
+    EasyLoading.show();
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      setState(() {
+        _showError = true;
+      });
+      EasyLoading.dismiss();
+      return;
+    }
+    if (!_emailController.text.isEmail) {
+      setState(() {
+        _showError = true;
+      });
+      EasyLoading.dismiss();
+      return;
+    }
+
+    if (_passwordController.text.length < 6) {
+      setState(() {
+        _showError = true;
+      });
+      EasyLoading.dismiss();
+      return;
+    }
     try {
-      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-        setState(() {
-          _showError = true;
-          _errorMessage = 'Please fill in all fields';
-        });
-        return;
-      }
-      if (!_emailController.text.isEmail) {
-        setState(() {
-          _showError = true;
-          _errorMessage = 'Please enter your correct email';
-        });
-        return;
-      }
+      final authMethods = FirebaseAuthMethods();
 
-      if (_passwordController.text.length < 6) {
-        setState(() {
-          _showError = true;
-          _errorMessage = 'Password must be at least 6 characters long.';
-        });
-        return;
-      }
-
-      var res = await FirebaseAuthMethods().loginInUser(
-        email: _emailController.text,
+      User? firebaseUser = await authMethods.loginInUser(
+        email: _emailController.text.trim(),
         password: _passwordController.text,
       );
 
-      if (res.toString() == 'success') {
+      // Check if widget is still mounted before using context or setState
+      if (!mounted) {
+        EasyLoading.dismiss();
+        return;
+      }
+
+      if (firebaseUser != null) {
+        UserModel? userModel =
+            await authMethods.getUserDetails(firebaseUser.uid);
+
+        // Check again if widget is still mounted
+        if (!mounted) {
+          EasyLoading.dismiss();
+          return;
+        }
+
+        EasyLoading.dismiss();
+        Toaster.showToast('Login successful');
+
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(),
           ),
           (route) => false,
-        ); // Navigate to dashboard screen
-        Toaster.showToast('Login successful');
+        );
       } else {
-        Toaster.showToast('Login failed');
+        // Check if widget is still mounted before using setState
+        if (!mounted) {
+          EasyLoading.dismiss();
+          return;
+        }
+
+        setState(() {
+          _showError = true;
+        });
+        EasyLoading.dismiss();
+        Toaster.showToast('Login failed: Invalid credentials');
       }
     } catch (e) {
-      Toaster.showToast(e.toString());
+      debugPrint("Error during login process: $e");
+
+      // Check if widget is still mounted
+      if (!mounted) {
+        EasyLoading.dismiss();
+        return;
+      }
+
+      EasyLoading.dismiss();
+      Toaster.showToast('An error occurred: ${e.toString()}');
+
+      setState(() {
+        _showError = true;
+      });
     }
   }
 
@@ -296,7 +338,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            onPressed: _attemptLogin,
+                            onPressed: () async {
+                              await _attemptLogin();
+                            },
                             child: Text(
                               "Login",
                               style: TextStyle(

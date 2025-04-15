@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:ut_worx/constant/easyLoding.dart';
 import 'package:ut_worx/view/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:ut_worx/view/dashboard/dashboard_screen.dart';
 import 'package:ut_worx/view/home_page.dart';
 
 void main() async {
@@ -16,6 +17,7 @@ void main() async {
         projectId: "ut-works-15d61",
         storageBucket: "ut-works-15d61.firebasestorage.app"),
   );
+  await Easyloding.configLoading();
   runApp(const MyApp());
 }
 
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'UT WorX',
+      builder: EasyLoading.init(),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {

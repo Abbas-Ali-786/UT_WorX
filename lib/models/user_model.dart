@@ -1,11 +1,13 @@
 class UserModel {
   final String email;
   final String password;
+  final String uid;
   final String role;
 
   UserModel({
     required this.email,
     required this.password,
+    required this.uid,
     required this.role,
   });
 
@@ -14,6 +16,7 @@ class UserModel {
     return UserModel(
       email: json['email'] ?? '',
       password: json['password'] ?? '',
+      uid: json['uid'] ?? '',
       role: json['role'] ?? '',
     );
   }
@@ -23,6 +26,7 @@ class UserModel {
     return {
       'email': email,
       'password': password,
+      'uid': uid,
       'role': role,
     };
   }

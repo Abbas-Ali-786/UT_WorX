@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ut_worx/models/user_model.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 
 class CustomHeader extends StatefulWidget {
