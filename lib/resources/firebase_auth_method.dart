@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ut_worx/constant/toaster.dart';
 import 'package:ut_worx/models/user_model.dart';
 
 class FirebaseAuthMethods {
@@ -47,7 +48,16 @@ class FirebaseAuthMethods {
         email: email,
         password: password,
       );
-      return userCredential.user;
+      final userDoc = await _firestore
+          .collection('Users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      if (userDoc.exists) {
+        return userCredential.user;
+      } else {
+        return null;
+      }
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase Auth errors (optional but recommended)
       debugPrint('Firebase Auth Error: ${e.code} - ${e.message}');

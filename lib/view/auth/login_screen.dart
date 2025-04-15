@@ -125,6 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final String role = ModalRoute.of(context)?.settings.name ?? '';
+
     return Scaffold(
       backgroundColor: Color(0XFFF4F7FE),
       body: Stack(

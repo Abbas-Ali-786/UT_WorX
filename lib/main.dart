@@ -6,6 +6,7 @@ import 'package:ut_worx/constant/easyLoding.dart';
 import 'package:ut_worx/view/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ut_worx/view/home_page.dart';
+import 'package:ut_worx/view/onboarding/onboarding_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.hasData) {
                 return HomePage();
               } else {
-                return LoginScreen();
+                return OnboardingScreen();
               }
             case ConnectionState.done:
               return const Text('Stream has finished');
