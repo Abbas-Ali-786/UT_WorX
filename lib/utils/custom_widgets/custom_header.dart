@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ut_worx/models/user_model.dart';
 import 'package:ut_worx/resources/firebase_database.dart';
@@ -13,6 +14,7 @@ class CustomHeader extends StatefulWidget {
 class _CustomHeaderState extends State<CustomHeader> {
   @override
   Widget build(BuildContext context) {
+    final String userId = FirebaseAuth.instance.currentUser!.uid;
     return ResponsiveLayout(
       builder: (context, responsive) {
         // Define responsive values for AppBar
@@ -117,21 +119,10 @@ class _CustomHeaderState extends State<CustomHeader> {
                         desktop: 10.0,
                       )),
                       // StreamBuilder for user name
-                      StreamBuilder<UserModel?>(
-                        stream: FirebaseDatabase().getUserStream(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Text(
-                              "Loading...",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: userNameFontSize,
-                              ),
-                            );
-                          }
 
+                      FutureBuilder<UserModel?>(
+                        future: FirebaseDatabase().getUserDetails(userId),
+                        builder: (context, snapshot) {
                           final String displayName =
                               snapshot.data?.email ?? "User";
                           return Text(
