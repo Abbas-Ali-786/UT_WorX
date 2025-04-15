@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ut_worx/models/user_model.dart';
+import 'package:ut_worx/resources/firebase_database.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 
 class CustomHeader extends StatefulWidget {
@@ -115,13 +116,33 @@ class _CustomHeaderState extends State<CustomHeader> {
                         tablet: 8.0,
                         desktop: 10.0,
                       )),
-                      Text(
-                        "Emirhan Boruch",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: userNameFontSize,
-                        ),
+                      // StreamBuilder for user name
+                      StreamBuilder<UserModel?>(
+                        stream: FirebaseDatabase().getUserStream(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text(
+                              "Loading...",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: userNameFontSize,
+                              ),
+                            );
+                          }
+
+                          final String displayName =
+                              snapshot.data?.email ?? "User";
+                          return Text(
+                            displayName,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: userNameFontSize,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ],

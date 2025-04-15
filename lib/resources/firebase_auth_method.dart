@@ -58,19 +58,6 @@ class FirebaseAuthMethods {
     }
   }
 
-  Future<UserModel?> getUserDetails(String uid) async {
-    try {
-      var userDoc = await _firestore.collection('Users').doc(uid).get();
-      if (userDoc.exists) {
-        return UserModel.fromJson(userDoc.data()!);
-      }
-      return null;
-    } catch (e) {
-      debugPrint("Error fetching user details: $e");
-      return null;
-    }
-  }
-
 // reset password
   Future<String> resetPassword({required String email}) async {
     String res = "Some error occurred";

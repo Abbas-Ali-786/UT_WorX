@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:ut_worx/constant/toaster.dart';
 import 'package:ut_worx/models/user_model.dart';
 import 'package:ut_worx/resources/firebase_auth_method.dart';
+import 'package:ut_worx/resources/firebase_database.dart';
 import 'package:ut_worx/view/home_page.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 
@@ -73,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (firebaseUser != null) {
         UserModel? userModel =
-            await authMethods.getUserDetails(firebaseUser.uid);
+            await FirebaseDatabase().getUserDetails(firebaseUser.uid);
 
         // Check again if widget is still mounted
         if (!mounted) {
