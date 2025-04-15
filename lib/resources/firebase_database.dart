@@ -7,6 +7,7 @@ class FirebaseDatabase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // Fetch user details
   Future<UserModel?> getUserDetails(String uid) async {
     try {
       var userDoc = await _firestore.collection('Users').doc(uid).get();
@@ -20,7 +21,7 @@ class FirebaseDatabase {
     }
   }
 
-  // Stream for user data
+  // Stream to fetch user details
   Stream<UserModel?> getUserStream() {
     final User? currentUser = _auth.currentUser;
     if (currentUser != null) {
