@@ -40,18 +40,4 @@ class FirebaseDatabase {
     }
     return Stream.value(null);
   }
-
-// Create notification
-  // Future<bool> createNotification(NotificationModel notification) async {
-  //   try {
-  //     await _firestore
-  //         .collection('Notifications')
-  //         .doc(notification.id)
-  //         .set(notification.toJson());
-  //     return true;
-  //   } catch (e) {
-  //     debugPrint("Error creating notification: $e");
-  //     return false;
-  //   }
-  // }
 }

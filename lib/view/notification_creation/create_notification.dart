@@ -96,11 +96,28 @@ class _NotificationDialogState extends State<NotificationDialog> {
         'status': 'Pending',
       };
 
+      // create preliminary report data
+      final Map<String, dynamic> preliminaryReportData = {
+        'orderId': orderId,
+        'orderTitle': _titleController.text,
+        'assetSelection': _assetController.text,
+        'findings': '',
+        'followUps': false,
+        'createdBy': userEmail,
+        'createdAt': FieldValue.serverTimestamp(),
+        'status': 'Pending',
+      };
+
       // Save to Firebase
       await FirebaseFirestore.instance
           .collection('Notifications')
           .doc(orderId)
           .set(notificationData);
+
+      await FirebaseFirestore.instance
+          .collection('PreliminaryReports')
+          .doc(orderId)
+          .set(preliminaryReportData);
 
       // Hide loading indicator
       EasyLoading.dismiss();

@@ -1,155 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ut_worx/screen_models/preliminary_report_model.dart';
+import 'package:ut_worx/constant/toaster.dart';
+import 'package:ut_worx/firebase_models/fb_preliminary_report_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
-import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/preliminary_report/create_preliminary_report.dart';
 
-class PreliminaryReportScreen extends StatefulWidget {
+class PreliminaryReportScreen extends StatelessWidget {
   const PreliminaryReportScreen({super.key});
-
-  @override
-  _PreliminaryReportScreenState createState() =>
-      _PreliminaryReportScreenState();
-}
-
-class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
-  List<PreliminaryReport> reports = [
-    PreliminaryReport(
-      reportId: '2563478912',
-      workOrderId: 'Dog Trainer',
-      assetId: '25486',
-      findings: 'Aliquam pulvinar vestibulum blandit. Donec sed nisl libero.',
-      followUpsRequired: true,
-      createdBy: 'Andrew',
-      status: 'Completed',
-    ),
-    PreliminaryReport(
-      reportId: '2478965123',
-      workOrderId: 'Nursing Assistant',
-      assetId: '47893',
-      findings: 'Aliquam pulvinar vestibulum blandit. Donec sed nisl libero.',
-      followUpsRequired: false,
-      createdBy: 'Falcon',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '5741289634',
-      workOrderId: 'Vice President',
-      assetId: '12478',
-      findings: 'Sam',
-      followUpsRequired: true,
-      createdBy: 'Sam',
-      status: 'Rejected',
-    ),
-    PreliminaryReport(
-      reportId: '8741523698',
-      workOrderId: 'BDR',
-      assetId: '32789',
-      findings: 'Falcon',
-      followUpsRequired: true,
-      createdBy: 'Falcon',
-      status: 'OnHold',
-    ),
-    PreliminaryReport(
-      reportId: '7142589634',
-      workOrderId: 'SDR',
-      assetId: '14789',
-      findings: 'Tony',
-      followUpsRequired: true,
-      createdBy: 'Tony',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '1452452014',
-      workOrderId: 'Product Owner',
-      assetId: '24631',
-      findings: 'Paul',
-      followUpsRequired: true,
-      createdBy: 'Paul',
-      status: 'Completed',
-    ),
-    PreliminaryReport(
-      reportId: '2498756321',
-      workOrderId: 'CSM',
-      assetId: '02483',
-      findings: 'Baron',
-      followUpsRequired: true,
-      createdBy: 'Baron',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '2487569314',
-      workOrderId: 'Account Executive',
-      assetId: '80456',
-      findings: 'Falcon',
-      followUpsRequired: true,
-      createdBy: 'Falcon',
-      status: 'Rejected',
-    ),
-    PreliminaryReport(
-      reportId: '0147751236',
-      workOrderId: 'BDR',
-      assetId: '40369',
-      findings: 'Sam',
-      followUpsRequired: true,
-      createdBy: 'Sam',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '2540893014',
-      workOrderId: 'Account Executive',
-      assetId: '80456',
-      findings: 'Baron',
-      followUpsRequired: true,
-      createdBy: 'Baron',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '0147751236',
-      workOrderId: 'CSM',
-      assetId: '02483',
-      findings: 'Falcon',
-      followUpsRequired: true,
-      createdBy: 'Falcon',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '2498756321',
-      workOrderId: 'Product Owner',
-      assetId: '32789',
-      findings: 'Sam',
-      followUpsRequired: true,
-      createdBy: 'Sam',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '7142589634',
-      workOrderId: 'BDR',
-      assetId: '47893',
-      findings: 'Paul',
-      followUpsRequired: true,
-      createdBy: 'Paul',
-      status: 'Pending',
-    ),
-    PreliminaryReport(
-      reportId: '2540893014',
-      workOrderId: 'SDR',
-      assetId: '12762',
-      findings: 'Tony',
-      followUpsRequired: true,
-      createdBy: 'Tony',
-      status: 'Pending',
-    ),
-  ];
-
-  void toggleFollowUpsRequired(String reportId) {
-    setState(() {
-      final report =
-          reports.firstWhere((report) => report.reportId == reportId);
-      report.followUpsRequired = !report.followUpsRequired;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,6 +67,7 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
         // ),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
                 padding:
@@ -249,125 +108,198 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(10),
                 margin: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(8),
                   color: Colors.white,
                 ),
-                child: Scrollbar(
-                  thumbVisibility: true,
-                  thickness: 8,
-                  radius: const Radius.circular(10),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      width: usefullLayout
-                          ? MediaQuery.sizeOf(context).width * 1.3
-                          : 900,
-                      child: DataTable(
-                        columnSpacing: 20,
-                        horizontalMargin: 15,
-                        headingTextStyle: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: tableTitle),
-                        headingRowColor:
-                            WidgetStateProperty.all(Color(0XFFE5E7EB)),
-                        dataTextStyle: TextStyle(fontSize: tableTitle),
-                        headingRowHeight: tableRowHeight,
-                        dataRowHeight: tableRowHeight,
-                        columns: const [
-                          DataColumn(
-                              label: Expanded(
-                                  child: Text(
-                            'Report ID',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))),
-                          DataColumn(
-                              label: Expanded(
-                                  child: Text(
-                            'Work Order ID',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))),
-                          DataColumn(
-                              label: Expanded(
-                                  child: Text(
-                            'Asset ID',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))),
-                          DataColumn(
-                              label: Expanded(
-                                  child: Text(
-                            'Findings',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))),
-                          DataColumn(
-                              label: Expanded(
-                                  child: Text(
-                            'Follow Ups Require',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))),
-                          DataColumn(
-                              label: Expanded(
-                                  child: Text(
-                            'Created By',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))),
-                          DataColumn(
-                              label: Expanded(
-                                  child: Text(
-                            'Status',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ))),
-                        ],
-                        rows: reports
-                            .map<DataRow>((report) => DataRow(cells: [
-                                  DataCell(Text(report.reportId)),
-                                  DataCell(Text(report.workOrderId)),
-                                  DataCell(Text(report.assetId)),
-                                  DataCell(Text(report.findings)),
-                                  DataCell(
-                                    Transform.scale(
-                                      scale: 0.7,
-                                      child: Switch(
-                                        value: report.followUpsRequired,
-                                        activeTrackColor: Color(0XFF2563EB),
-                                        activeColor: Colors.white,
-                                        onChanged: (value) {
-                                          toggleFollowUpsRequired(
-                                              report.reportId);
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('PreliminaryReports')
+                      .orderBy('createdAt', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0XFF7DBD2C),
+                        ),
+                      );
+                    }
+
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(
+                        child: Text('No preliminary reports found'),
+                      );
+                    }
+
+                    // Convert Firestore documents to PreliminaryReport objects
+                    final List<PreliminaryReport> reportData =
+                        snapshot.data!.docs.map((doc) {
+                      final data = doc.data() as Map<String, dynamic>;
+                      return PreliminaryReport(
+                        orderId: data['orderId'] ?? '',
+                        orderTitle: data['orderTitle'] ?? '',
+                        assetSelection: data['assetSelection'] ?? '',
+                        findings: data['findings'] ?? '',
+                        followUps: data['followUps'] ?? false,
+                        createdBy: data['createdBy'] ?? '',
+                        status: data['status'] ?? 'Pending',
+                      );
+                    }).toList();
+
+                    // Use your existing table UI with the fetched data
+                    return Scrollbar(
+                      thumbVisibility: true,
+                      thickness: 8,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          width: usefullLayout
+                              ? MediaQuery.sizeOf(context).width * 1.3
+                              : 800,
+                          margin: EdgeInsets.only(bottom: 15),
+                          child: DataTable(
+                            columnSpacing: 20,
+                            horizontalMargin: 15,
+                            headingTextStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: tableTitle),
+                            headingRowColor:
+                                WidgetStateProperty.all(Color(0XFFE5E7EB)),
+                            dataTextStyle: TextStyle(fontSize: tableTitle),
+                            headingRowHeight: tableRowHeight,
+                            dataRowHeight: tableRowHeight,
+                            columns: const [
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Text(
+                                'ORDER ID',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ))),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Text(
+                                'ORDER TITLE',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ))),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Text(
+                                'ASSET SELECTION',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ))),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Text(
+                                'FINDINGS',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ))),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Text(
+                                'FOLLOW UPS',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ))),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Text(
+                                'CREATED BY',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ))),
+                              DataColumn(
+                                  label: Expanded(
+                                      child: Text(
+                                'STATUS',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ))),
+                            ],
+                            rows: reportData.map((data) {
+                              return DataRow(cells: [
+                                DataCell(Text(data.orderId)),
+                                DataCell(Text(data.orderTitle)),
+                                DataCell(Text(data.assetSelection)),
+                                DataCell(
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 200,
+                                        child: Text(
+                                          data.findings,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        padding: EdgeInsets.zero,
+                                        icon: Icon(Icons.edit,
+                                            size: 20, color: Color(0XFF7DBD2C)),
+                                        onPressed: () {
+                                          _showEditFindingsDialog(
+                                              context, data);
                                         },
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                DataCell(
+                                  Transform.scale(
+                                    scale: 0.7,
+                                    child: Switch(
+                                      value: data.followUps,
+                                      onChanged: (value) {
+                                        FirebaseFirestore.instance
+                                            .collection('PreliminaryReports')
+                                            .doc(data.orderId)
+                                            .update({
+                                          'followUps': value,
+                                        });
+                                        data.followUps = value;
+                                      },
+                                      activeColor: Color(0XFF7DBD2C),
                                     ),
                                   ),
-                                  DataCell(Text(report.createdBy)),
-                                  DataCell(
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: _getStatusColor(report.status),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Text(
-                                        report.status,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
+                                ),
+                                DataCell(Text(data.createdBy)),
+                                DataCell(
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: _getStatusColor(data.status),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      data.status,
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ),
-                                ]))
-                            .toList(),
+                                ),
+                              ]);
+                            }).toList(),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -390,5 +322,65 @@ class _PreliminaryReportScreenState extends State<PreliminaryReportScreen> {
       default:
         return Colors.grey;
     }
+  }
+
+  void _showEditFindingsDialog(BuildContext context, PreliminaryReport report) {
+    final TextEditingController findingsController =
+        TextEditingController(text: report.findings);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: TextField(
+            controller: findingsController,
+            decoration: InputDecoration(
+              hintText: 'Enter findings',
+              border: OutlineInputBorder(),
+            ),
+            maxLines: 3,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Color(0XFF7DBD2C),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0XFF7DBD2C),
+              ),
+              onPressed: () async {
+                try {
+                  await FirebaseFirestore.instance
+                      .collection('PreliminaryReports')
+                      .doc(report.orderId)
+                      .update({
+                    'findings': findingsController.text,
+                  });
+
+                  Navigator.of(context).pop();
+
+                  Toaster.showToast('Findings updated successfully');
+                } catch (e) {
+                  Navigator.of(context).pop();
+                  Toaster.showToast('Failed to update findings');
+                }
+              },
+              child: Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
