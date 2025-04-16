@@ -26,80 +26,22 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
       return Scaffold(
         backgroundColor: const Color(0XFFF4F7FE),
         drawer: const CustomDrawer(),
-        // appBar: PreferredSize(
-        //   preferredSize: Size.fromHeight(appBarHeight),
-        //   child: CustomHeader(),
-        // ),
-        body: const NotificationTable(),
+        body: const WorkSchedulingTable(),
       );
     });
   }
 }
 
-class NotificationTable extends StatelessWidget {
-  const NotificationTable({super.key});
+class WorkSchedulingTable extends StatelessWidget {
+  const WorkSchedulingTable({super.key});
 
   @override
   Widget build(BuildContext context) {
     final List<WorkSchedulingModel> workScheduling = [
       WorkSchedulingModel(
-          workOrderId: '5478930124',
-          technicianAssigned: 'Sam',
-          scheduledDate: 12478,
-          estimatedHours: 'Sam',
-          status: 'Completed'),
-      WorkSchedulingModel(
-          workOrderId: '3541278930',
-          technicianAssigned: 'Falcon',
-          scheduledDate: 32789,
-          estimatedHours: 'Falcon',
-          status: 'Pending'),
-      WorkSchedulingModel(
-          workOrderId: '0124789635',
-          technicianAssigned: 'Tony',
-          scheduledDate: 14789,
-          estimatedHours: 'Tony',
-          status: 'Rejected'),
-      WorkSchedulingModel(
-          workOrderId: '5478213695',
-          technicianAssigned: 'Paul',
-          scheduledDate: 24631,
-          estimatedHours: 'Paul',
-          status: 'OnHold'),
-      WorkSchedulingModel(
-          workOrderId: '2458731054',
-          technicianAssigned: 'Baron',
-          scheduledDate: 02483,
-          estimatedHours: 'Baron',
-          status: 'Pending'),
-      WorkSchedulingModel(
-          workOrderId: '9352417890',
-          technicianAssigned: 'Falcon',
-          scheduledDate: 80456,
-          estimatedHours: 'Falcon',
-          status: 'Completed'),
-      WorkSchedulingModel(
           workOrderId: '5023647891',
           technicianAssigned: 'Sam',
           scheduledDate: 40369,
-          estimatedHours: 'Sam',
-          status: 'Pending'),
-      WorkSchedulingModel(
-          workOrderId: '0245318762',
-          technicianAssigned: 'Baron',
-          scheduledDate: 80456,
-          estimatedHours: 'Baron',
-          status: 'Rejected'),
-      WorkSchedulingModel(
-          workOrderId: '4783169524',
-          technicianAssigned: 'Falcon',
-          scheduledDate: 02483,
-          estimatedHours: 'Falcon',
-          status: 'Pending'),
-      WorkSchedulingModel(
-          workOrderId: '2453178326',
-          technicianAssigned: 'Sam',
-          scheduledDate: 32789,
           estimatedHours: 'Sam',
           status: 'Pending'),
       WorkSchedulingModel(

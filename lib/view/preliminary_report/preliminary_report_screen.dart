@@ -269,9 +269,8 @@ class PreliminaryReportScreen extends StatelessWidget {
                                             .collection('PreliminaryReports')
                                             .doc(data.orderId)
                                             .update({
-                                          'followUps': value,
+                                          'followUps': true,
                                         });
-                                        data.followUps = value;
                                       },
                                       activeColor: Color(0XFF7DBD2C),
                                     ),
