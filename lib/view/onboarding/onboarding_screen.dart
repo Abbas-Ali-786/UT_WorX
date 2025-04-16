@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:ut_worx/constant/enums.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
@@ -184,7 +186,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                                   .elementAt(index)
                                                   .toString()
                                                   .split('.')[1];
-                                              print(
+                                              debugPrint(
                                                   'Selected User Level: $selectedUserLevel');
                                               isDropdownOpen = false;
                                             });
@@ -237,21 +239,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.disabled)) {
+                                  WidgetStateProperty.resolveWith<Color>(
+                                (Set<WidgetState> states) {
+                                  if (states.contains(WidgetState.disabled)) {
                                     return Color(0XFF7DBD2C).withOpacity(0.5);
                                   }
-                                  if (states.contains(MaterialState.hovered)) {
+                                  if (states.contains(WidgetState.hovered)) {
                                     return Color(0XFF7DBD2C).withOpacity(0.8);
                                   }
                                   return Color(0XFF7DBD2C);
                                 },
                               ),
-                              padding: MaterialStateProperty.all(
+                              padding: WidgetStateProperty.all(
                                 EdgeInsets.symmetric(vertical: buttonPadding),
                               ),
-                              shape: MaterialStateProperty.all(
+                              shape: WidgetStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
