@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   // Function to handle login attempt
-  Future<void> _attemptLogin() async {
+  Future<void> _attemptLogin(String userRole) async {
     EasyLoading.show();
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       setState(() {
@@ -64,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
       User? firebaseUser = await authMethods.loginInUser(
         email: _emailController.text.trim(),
         password: _passwordController.text,
+        role: userRole,
       );
 
       // Check if widget is still mounted before using context or setState
@@ -125,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String role = ModalRoute.of(context)?.settings.name ?? '';
+    final String userRole = ModalRoute.of(context)?.settings.name ?? '';
 
     return Scaffold(
       backgroundColor: Color(0XFFF4F7FE),
@@ -342,7 +343,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             onPressed: () async {
-                              await _attemptLogin();
+                              debugPrint('Role is: $userRole');
+                              await _attemptLogin(userRole);
                             },
                             child: Text(
                               "Login",

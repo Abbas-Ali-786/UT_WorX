@@ -42,6 +42,7 @@ class FirebaseAuthMethods {
   Future<User?> loginInUser({
     required String email,
     required String password,
+    required String role,
   }) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -53,7 +54,7 @@ class FirebaseAuthMethods {
           .doc(userCredential.user!.uid)
           .get();
 
-      if (userDoc.exists) {
+      if (userDoc.exists && userDoc.data()!['role'] == role) {
         return userCredential.user;
       } else {
         return null;
