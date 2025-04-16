@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
+import '../../constant/toaster.dart';
 
 class NotificationDialog extends StatefulWidget {
   const NotificationDialog({super.key});
@@ -9,10 +14,108 @@ class NotificationDialog extends StatefulWidget {
 }
 
 class _NotificationDialogState extends State<NotificationDialog> {
-  String id = '52369884';
-  String faultObservation = '';
-  String findings = '';
-  bool followUp = true;
+  // Form controllers
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _assetController = TextEditingController();
+
+  // State variables
+  String workCategory = 'Select';
+  String priority = 'Select';
+  bool breakdownBypass = true;
+
+  // Work category options
+  final List<String> workCategories = [
+    'Mechanical',
+    'Electrical',
+    'Plumbing',
+    'HVAC',
+    'Other'
+  ];
+
+  // Priority options
+  final List<String> priorities = ['Low', 'Medium', 'High', 'Critical'];
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _assetController.dispose();
+    super.dispose();
+  }
+
+  // Function to submit notification to Firebase
+  Future<void> _submitNotification() async {
+    // Validate inputs
+    if (_titleController.text.isEmpty) {
+      Toaster.showToast('Please enter a work order title');
+      return;
+    }
+
+    if (_descriptionController.text.isEmpty) {
+      Toaster.showToast('Please enter a description');
+      return;
+    }
+
+    if (_assetController.text.isEmpty) {
+      Toaster.showToast('Please select an asset');
+      return;
+    }
+
+    if (workCategory == 'Select') {
+      Toaster.showToast('Please select a work category');
+      return;
+    }
+
+    if (priority == 'Select') {
+      Toaster.showToast('Please select a priority');
+      return;
+    }
+
+    // Show loading indicator
+    EasyLoading.show(status: 'Creating notification...');
+
+    try {
+      // Generate a unique ID
+      final String orderId = const Uuid().v1().substring(0, 8);
+
+      // Get current user email
+      final String userEmail = FirebaseAuth.instance.currentUser?.email ?? '';
+
+      // Create notification data
+      final Map<String, dynamic> notificationData = {
+        'orderId': orderId,
+        'orderTitle': _titleController.text,
+        'description': _descriptionController.text,
+        'assetSelection': _assetController.text,
+        'workCategory': workCategory,
+        'priority': priority,
+        'breakdownBypass': breakdownBypass,
+        'createdBy': userEmail,
+        'createdAt': FieldValue.serverTimestamp(),
+        'status': 'Pending',
+      };
+
+      // Save to Firebase
+      await FirebaseFirestore.instance
+          .collection('Notifications')
+          .doc(orderId)
+          .set(notificationData);
+
+      // Hide loading indicator
+      EasyLoading.dismiss();
+
+      Toaster.showToast('Notification created successfully');
+
+      if (mounted) {
+        Navigator.of(context).pop(true); // Return true to indicate success
+      }
+    } catch (e) {
+      EasyLoading.dismiss();
+      Toaster.showToast('Error: ${e.toString()}');
+      debugPrint('Error creating notification: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +177,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   ),
                   SizedBox(height: verticalSpacing * 2),
                   Text(
-                    'Work Order Title',
+                    'Order Title',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: labelFontSize,
@@ -82,9 +185,14 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: _titleController,
                     decoration: InputDecoration(
                       hintText: 'Please add title',
                       hintStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -100,11 +208,6 @@ class _NotificationDialogState extends State<NotificationDialog> {
                         ),
                       ),
                     ),
-                    onChanged: (newValue) {
-                      setState(() {
-                        id = newValue;
-                      });
-                    },
                     autovalidateMode: AutovalidateMode.always,
                   ),
                   SizedBox(height: verticalSpacing),
@@ -117,14 +220,19 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: _descriptionController,
                     maxLines: responsive.deviceValue(
                       mobile: 2,
                       tablet: 3,
                       desktop: 3,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'Please add title',
+                      hintText: 'Please add description',
                       hintStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -140,11 +248,6 @@ class _NotificationDialogState extends State<NotificationDialog> {
                         ),
                       ),
                     ),
-                    onChanged: (newValue) {
-                      setState(() {
-                        faultObservation = newValue;
-                      });
-                    },
                     autovalidateMode: AutovalidateMode.always,
                   ),
                   SizedBox(height: verticalSpacing),
@@ -157,9 +260,14 @@ class _NotificationDialogState extends State<NotificationDialog> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: _assetController,
                     decoration: InputDecoration(
-                      hintText: 'Please add title',
+                      hintText: 'Please select asset',
                       hintStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide:
@@ -171,37 +279,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
                         vertical: 8,
                       ),
                     ),
-                    onChanged: (newValue) {
-                      setState(() {
-                        findings = newValue;
-                      });
-                    },
                   ),
                   SizedBox(height: verticalSpacing),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       'Follow Up',
-                  //       style: TextStyle(
-                  //         fontWeight: FontWeight.bold,
-                  //         fontSize: labelFontSize,
-                  //       ),
-                  //     ),
-                  //     const Spacer(),
-                  //     Checkbox(
-                  //       value: followUp,
-                  //       activeColor: Color(0XFF7DBD2C),
-                  //       onChanged: (bool? newValue) {
-                  //         setState(() {
-                  //           if (newValue != null) {
-                  //             followUp = newValue;
-                  //           }
-                  //         });
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: verticalSpacing),
                   Text(
                     'Upload Attachments',
                     style: TextStyle(
@@ -227,7 +306,9 @@ class _NotificationDialogState extends State<NotificationDialog> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.cloud_upload_outlined),
-                          onPressed: () {},
+                          onPressed: () {
+                            // File upload functionality would go here
+                          },
                         ),
                       ],
                     ),
@@ -241,27 +322,45 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0XFFE5E7EB)),
+                  DropdownButtonFormField<String>(
+                    value: workCategory == 'Select' ? null : workCategory,
+                    decoration: InputDecoration(
+                      hintText: 'Select',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Select',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_drop_down_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
+                    dropdownColor: Colors.white,
+                    icon: Icon(Icons.arrow_drop_down_outlined),
+                    isExpanded: true,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        workCategory = newValue ?? 'Select';
+                      });
+                    },
+                    items: workCategories
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
                   SizedBox(height: verticalSpacing),
                   Text(
@@ -271,29 +370,46 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       fontSize: labelFontSize,
                     ),
                   ),
-
                   const SizedBox(height: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0XFFE5E7EB)),
+                  DropdownButtonFormField<String>(
+                    value: priority == 'Select' ? null : priority,
+                    decoration: InputDecoration(
+                      hintText: 'Select',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Select',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_drop_down_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
+                    dropdownColor: Colors.white,
+                    icon: Icon(Icons.arrow_drop_down_outlined),
+                    isExpanded: true,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        priority = newValue ?? 'Select';
+                      });
+                    },
+                    items: priorities
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
                   SizedBox(height: verticalSpacing),
                   Row(
@@ -307,12 +423,12 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       ),
                       const Spacer(),
                       Checkbox(
-                        value: followUp,
+                        value: breakdownBypass,
                         activeColor: Color(0XFF7DBD2C),
                         onChanged: (bool? newValue) {
                           setState(() {
                             if (newValue != null) {
-                              followUp = newValue;
+                              breakdownBypass = newValue;
                             }
                           });
                         },
@@ -326,7 +442,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            _buildSaveDraftButton(context, responsive),
+                            _buildCancelButton(context, responsive),
                             SizedBox(height: verticalSpacing),
                             _buildSubmitButton(context, responsive),
                           ],
@@ -335,8 +451,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                                child:
-                                    _buildSaveDraftButton(context, responsive)),
+                                child: _buildCancelButton(context, responsive)),
                             const SizedBox(width: 10),
                             Expanded(
                                 child: _buildSubmitButton(context, responsive)),
@@ -351,8 +466,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
     );
   }
 
-  Widget _buildSaveDraftButton(
-      BuildContext context, ResponsiveInfo responsive) {
+  Widget _buildCancelButton(BuildContext context, ResponsiveInfo responsive) {
     return ElevatedButton(
       onPressed: () {
         Navigator.of(context).pop();
@@ -391,8 +505,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   Widget _buildSubmitButton(BuildContext context, ResponsiveInfo responsive) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.of(context).pop();
+      onPressed: () async {
+        await _submitNotification();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0XFF7DBD2C),

@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'UT WorX',
       builder: EasyLoading.init(),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ut_worx/models/notification_data_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ut_worx/firebase_models/fb_notification_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
-import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/notification_creation/create_notification.dart';
 
@@ -16,18 +16,9 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(builder: (context, responsives) {
-      final appBarHeight = responsives.deviceValue(
-        mobile: 50.0,
-        tablet: 70.0,
-        desktop: 80.0,
-      );
       return Scaffold(
         backgroundColor: const Color(0XFFF4F7FE),
         drawer: const CustomDrawer(),
-        // appBar: PreferredSize(
-        //   preferredSize: Size.fromHeight(appBarHeight),
-        //   child: CustomHeader(),
-        // ),
         body: const NotificationTable(),
       );
     });
@@ -39,129 +30,6 @@ class NotificationTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<NotificationDataModel> notificationData = [
-      NotificationDataModel(
-        workOrderId: '2563478912',
-        workType: 'Dog Trainer',
-        assetId: '25486',
-        createdBy: 'Andrew',
-        status: 'Completed',
-        priority: 'High',
-      ),
-      NotificationDataModel(
-        workOrderId: '2478965123',
-        workType: 'Nursing Assistant',
-        assetId: '47893',
-        createdBy: 'Falcon',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '5741289634',
-        workType: 'Vice President',
-        assetId: '12478',
-        createdBy: 'Sam',
-        status: 'Rejected',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '8741523698',
-        workType: 'BDR',
-        assetId: '32789',
-        createdBy: 'Falcon',
-        status: 'OnHold',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '7142589634',
-        workType: 'SDR',
-        assetId: '14789',
-        createdBy: 'Tony',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '1452452014',
-        workType: 'Product Owner',
-        assetId: '24631',
-        createdBy: 'Paul',
-        status: 'Completed',
-        priority: 'High',
-      ),
-      NotificationDataModel(
-        workOrderId: '2498756321',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Baron',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '2487569314',
-        workType: 'Account Executive',
-        assetId: '80456',
-        createdBy: 'Falcon',
-        status: 'Rejected',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '0147751236',
-        workType: 'BDR',
-        assetId: '40369',
-        createdBy: 'Sam',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '2540893014',
-        workType: 'Account Executive',
-        assetId: '80456',
-        createdBy: 'Baron',
-        status: 'Pending',
-        priority: 'High',
-      ),
-      NotificationDataModel(
-        workOrderId: '0147751236',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Falcon',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '2498756321',
-        workType: 'Product Owner',
-        assetId: '32789',
-        createdBy: 'Sam',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '7142589634',
-        workType: 'BDR',
-        assetId: '47893',
-        createdBy: 'Paul',
-        status: 'Pending',
-        priority: 'Medium',
-      ),
-      NotificationDataModel(
-        workOrderId: '5741289634',
-        workType: 'CSM',
-        assetId: '02483',
-        createdBy: 'Andrew',
-        status: 'Pending',
-        priority: 'Low',
-      ),
-      NotificationDataModel(
-        workOrderId: '2540893014',
-        workType: 'SDR',
-        assetId: '12762',
-        createdBy: 'Tony',
-        status: 'Pending',
-        priority: 'High',
-      ),
-    ];
-
     return ResponsiveLayout(builder: (context, responsive) {
       final titlePadding = responsive.deviceValue(
         mobile: 20.0,
@@ -193,7 +61,6 @@ class NotificationTable extends StatelessWidget {
         tablet: 40.0,
         desktop: 50.0,
       );
-
       final bool usefullLayout = responsive.isTablet || responsive.isDesktop;
 
       return SingleChildScrollView(
@@ -246,101 +113,158 @@ class NotificationTable extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.white,
               ),
-              child: Scrollbar(
-                thumbVisibility: true,
-                thickness: 8,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    width: usefullLayout
-                        ? MediaQuery.sizeOf(context).width * 1.3
-                        : 800,
-                    child: DataTable(
-                      columnSpacing: 20,
-                      horizontalMargin: 15,
-                      headingTextStyle: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: tableTitle),
-                      headingRowColor:
-                          WidgetStateProperty.all(Color(0XFFE5E7EB)),
-                      dataTextStyle: TextStyle(fontSize: tableTitle),
-                      headingRowHeight: tableRowHeight,
-                      dataRowHeight: tableRowHeight,
-                      columns: const [
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'WORK ORDER ID',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'WORK TYPE',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'ASSET ID',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'CREATED BY',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'STATUS',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                        DataColumn(
-                            label: Expanded(
-                                child: Text(
-                          'PRIORITY',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ))),
-                      ],
-                      rows: notificationData.map((data) {
-                        return DataRow(cells: [
-                          DataCell(Text(data.workOrderId)),
-                          DataCell(Text(data.workType)),
-                          DataCell(Text(data.assetId)),
-                          DataCell(Text(data.createdBy)),
-                          DataCell(
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: _getStatusColor(data.status),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Notifications')
+                    .orderBy('createdAt', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(
+                      child: Text('No notifications found'),
+                    );
+                  }
+
+                  // Convert Firestore documents to NotificationDataModel objects
+                  final List<NotificationModel> notificationData =
+                      snapshot.data!.docs.map((doc) {
+                    final data = doc.data() as Map<String, dynamic>;
+                    DateTime? createdAt;
+                    if (data['createdAt'] != null) {
+                      createdAt = (data['createdAt'] as Timestamp).toDate();
+                    }
+
+                    return NotificationModel(
+                      orderId: data['orderId'] ?? '',
+                      orderTitle: data['orderTitle'] ?? '',
+                      description: data['description'] ?? '',
+                      assetSelection: data['assetSelection'] ?? '',
+                      workCategory: data['workCategory'] ?? '',
+                      createdBy: data['createdBy'] ?? '',
+                      status: data['status'] ?? 'Pending',
+                      priority: data['priority'] ?? '',
+                      breakdownBypass: data['breakdownBypass'] ?? '',
+                      createdAt: createdAt,
+                    );
+                  }).toList();
+
+                  return Scrollbar(
+                    thumbVisibility: true,
+                    thickness: 8,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        width: usefullLayout
+                            ? MediaQuery.sizeOf(context).width * 1.3
+                            : 800,
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: DataTable(
+                          columnSpacing: 20,
+                          horizontalMargin: 15,
+                          headingTextStyle: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: tableTitle),
+                          headingRowColor:
+                              WidgetStateProperty.all(Color(0XFFE5E7EB)),
+                          dataTextStyle: TextStyle(fontSize: tableTitle),
+                          headingRowHeight: tableRowHeight,
+                          dataRowHeight: tableRowHeight,
+                          columns: const [
+                            DataColumn(
+                                label: Expanded(
                               child: Text(
-                                data.status,
-                                style: const TextStyle(color: Colors.white),
+                                'ORDER ID',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              data.priority,
-                              style: TextStyle(
-                                  color: _getPriorityColor(data.priority)),
-                            ),
-                          ),
-                        ]);
-                      }).toList(),
+                            )),
+                            DataColumn(
+                                label: Expanded(
+                              child: Text(
+                                'ORDER TITLE',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Expanded(
+                              child: Text(
+                                'ASSET SELECTION',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Expanded(
+                              child: Text(
+                                'CREATED BY',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Expanded(
+                              child: Text(
+                                'STATUS',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Expanded(
+                              child: Text(
+                                'PRIORITY',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            )),
+                          ],
+                          rows: notificationData.map((data) {
+                            return DataRow(cells: [
+                              DataCell(Text(data.orderId)),
+                              DataCell(Text(data.orderTitle)),
+                              DataCell(Text(data.assetSelection)),
+                              DataCell(Text(data.createdBy)),
+                              DataCell(
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: _getStatusColor(data.status),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    data.status,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  data.priority,
+                                  style: TextStyle(
+                                      color: _getPriorityColor(data.priority)),
+                                ),
+                              ),
+                            ]);
+                          }).toList(),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],

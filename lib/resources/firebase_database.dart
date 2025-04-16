@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ut_worx/models/user_model.dart';
+import 'package:ut_worx/firebase_models/fb_notification_model.dart';
+import 'package:ut_worx/screen_models/user_model.dart';
 
 class FirebaseDatabase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -39,4 +40,18 @@ class FirebaseDatabase {
     }
     return Stream.value(null);
   }
+
+// Create notification
+  // Future<bool> createNotification(NotificationModel notification) async {
+  //   try {
+  //     await _firestore
+  //         .collection('Notifications')
+  //         .doc(notification.id)
+  //         .set(notification.toJson());
+  //     return true;
+  //   } catch (e) {
+  //     debugPrint("Error creating notification: $e");
+  //     return false;
+  //   }
+  // }
 }

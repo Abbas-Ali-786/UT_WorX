@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:ut_worx/constant/toaster.dart';
-import 'package:ut_worx/models/user_model.dart';
+import 'package:ut_worx/screen_models/user_model.dart';
 import 'package:ut_worx/resources/firebase_auth_method.dart';
 import 'package:ut_worx/resources/firebase_database.dart';
 import 'package:ut_worx/view/home_page.dart';

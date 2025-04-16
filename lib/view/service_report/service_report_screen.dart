@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ut_worx/models/service_report_model.dart';
+import 'package:ut_worx/screen_models/service_report_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';

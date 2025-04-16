@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ut_worx/models/notification_data_model.dart';
-import 'package:ut_worx/models/work_scheduling_model.dart';
+import 'package:ut_worx/screen_models/notification_data_model.dart';
+import 'package:ut_worx/screen_models/work_scheduling_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_header.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';

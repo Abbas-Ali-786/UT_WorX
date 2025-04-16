@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ut_worx/models/user_model.dart';
+import 'package:ut_worx/screen_models/user_model.dart';
 import 'package:ut_worx/resources/firebase_database.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 
