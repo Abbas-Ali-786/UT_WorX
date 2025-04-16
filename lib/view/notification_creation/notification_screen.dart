@@ -171,8 +171,8 @@ class NotificationTable extends StatelessWidget {
                             : 800,
                         margin: EdgeInsets.only(bottom: 15),
                         child: DataTable(
-                          columnSpacing: 20,
-                          horizontalMargin: 15,
+                          columnSpacing: 10,
+                          horizontalMargin: 10,
                           headingTextStyle: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: tableTitle),
