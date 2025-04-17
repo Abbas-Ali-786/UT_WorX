@@ -23,16 +23,37 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
   }
 
   void _checkForFollowUpRequests() {
+    // First, get all existing work order IDs from the WorkScheduling collection
     FirebaseFirestore.instance
-        .collection('PreliminaryReports')
-        .where('followUps', isEqualTo: true)
-        .snapshots()
-        .listen((snapshot) {
-      if (mounted) {
-        setState(() {
-          hasFollowUpRequests = snapshot.docs.isNotEmpty;
-        });
-      }
+        .collection('WorkScheduling')
+        .get()
+        .then((workSchedules) {
+      // Extract all work order IDs into a set for efficient lookup
+      final Set<String> existingWorkOrderIds = workSchedules.docs
+          .map((doc) => (doc.data()['workOrderId'] ?? '') as String)
+          .toSet();
+
+      // Now listen for preliminary reports with followUps=true
+      FirebaseFirestore.instance
+          .collection('PreliminaryReports')
+          .where('followUps', isEqualTo: true)
+          .snapshots()
+          .listen((snapshot) {
+        if (mounted) {
+          // Filter out reports that already have work schedules
+          final pendingReports = snapshot.docs.where((doc) {
+            final data = doc.data();
+            final reportOrderId = data['orderId'] ?? '';
+            // Only include reports whose IDs are NOT in the existing work schedules
+            return !existingWorkOrderIds.contains(reportOrderId);
+          }).toList();
+
+          setState(() {
+            // Only show notification if there are pending reports that haven't been scheduled
+            hasFollowUpRequests = pendingReports.isNotEmpty;
+          });
+        }
+      });
     });
   }
 
@@ -364,71 +385,123 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
                       .collection('PreliminaryReports')
                       .where('followUps', isEqualTo: true)
                       .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                  builder: (context, prelimReportSnapshot) {
+                    if (prelimReportSnapshot.connectionState ==
+                        ConnectionState.waiting) {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          color: Color(0XFF7DBD2C),
+                        ),
                       );
                     }
 
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
+                    if (prelimReportSnapshot.hasError) {
+                      return Text('Error: ${prelimReportSnapshot.error}');
                     }
 
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    if (!prelimReportSnapshot.hasData ||
+                        prelimReportSnapshot.data!.docs.isEmpty) {
                       return Text('No follow-up requests found');
                     }
 
-                    return Container(
-                      height: 300,
-                      child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          final doc = snapshot.data!.docs[index];
-                          final data = doc.data() as Map<String, dynamic>;
+                    // Get all work scheduling documents to check for existing IDs
+                    return FutureBuilder<QuerySnapshot>(
+                      future: FirebaseFirestore.instance
+                          .collection('WorkScheduling')
+                          .get(),
+                      builder: (context, workScheduleSnapshot) {
+                        if (workScheduleSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0XFF7DBD2C),
+                            ),
+                          );
+                        }
 
-                          return Card(
-                            margin: EdgeInsets.only(bottom: 10),
-                            child: ListTile(
-                              title: Text('Order ID: ${data['orderId'] ?? ''}'),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Title: ${data['orderTitle'] ?? ''}'),
-                                  Text(
-                                      'Asset: ${data['assetSelection'] ?? ''}'),
-                                  Text('Findings: ${data['findings'] ?? ''}'),
-                                ],
-                              ),
-                              trailing: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0XFF7DBD2C),
-                                ),
-                                onPressed: () {
-                                  // Create a work schedule from this request
-                                  Navigator.pop(context);
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return CreateWorkScheduling(
-                                        prefilledData: {
-                                          'workOrderId': data['orderId'],
-                                          'assetSelection':
-                                              data['assetSelection'],
+                        if (workScheduleSnapshot.hasError) {
+                          return Text('Error: ${workScheduleSnapshot.error}');
+                        }
+
+                        // Extract existing work order IDs
+                        final Set<dynamic> existingWorkOrderIds =
+                            workScheduleSnapshot.data != null
+                                ? workScheduleSnapshot.data!.docs
+                                    .map((doc) =>
+                                        (doc.data() as Map<String, dynamic>)[
+                                            'workOrderId'] ??
+                                        '')
+                                    .toSet()
+                                : {};
+
+                        // Filter preliminary reports to exclude those that already have work schedules
+                        final filteredReports =
+                            prelimReportSnapshot.data!.docs.where((doc) {
+                          final data = doc.data() as Map<String, dynamic>;
+                          final reportOrderId = data['orderId'] ?? '';
+                          return !existingWorkOrderIds.contains(reportOrderId);
+                        }).toList();
+
+                        if (filteredReports.isEmpty) {
+                          return Text('No new follow-up requests found');
+                        }
+
+                        return SizedBox(
+                          height: 300,
+                          child: ListView.builder(
+                            itemCount: filteredReports.length,
+                            itemBuilder: (context, index) {
+                              final doc = filteredReports[index];
+                              final data = doc.data() as Map<String, dynamic>;
+
+                              return Card(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: ListTile(
+                                  title: Text(
+                                      'Order ID: ${data['orderId'] ?? ''}'),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          'Title: ${data['orderTitle'] ?? ''}'),
+                                      Text(
+                                          'Asset: ${data['assetSelection'] ?? ''}'),
+                                      Text(
+                                          'Findings: ${data['findings'] ?? ''}'),
+                                    ],
+                                  ),
+                                  trailing: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color(0XFF7DBD2C),
+                                    ),
+                                    onPressed: () {
+                                      // Create a work schedule from this request
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return CreateWorkScheduling(
+                                            prefilledData: {
+                                              'workOrderId': data['orderId'],
+                                              'assetSelection':
+                                                  data['assetSelection'],
+                                            },
+                                          );
                                         },
                                       );
                                     },
-                                  );
-                                },
-                                child: Text(
-                                  'Schedule',
-                                  style: TextStyle(color: Colors.white),
+                                    child: Text(
+                                      'Schedule',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -439,7 +512,11 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Close'),
+                    child: Text('Close',
+                        style: TextStyle(
+                            color: Color(0XFF7DBD2C),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],

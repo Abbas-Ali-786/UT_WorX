@@ -111,15 +111,6 @@ class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
           .doc(_workOrderIdController.text)
           .set(workSchedulingData);
 
-      // If this was created from a follow-up request, update the preliminary report
-      // if (widget.prefilledData != null &&
-      //     widget.prefilledData!['orderId'] != null) {
-      //   await FirebaseFirestore.instance
-      //       .collection('PreliminaryReports')
-      //       .doc(widget.prefilledData!['orderId'])
-      //       .update({'followUps': false, 'status': 'Scheduled'});
-      // }
-
       // Hide loading indicator
       EasyLoading.dismiss();
 
