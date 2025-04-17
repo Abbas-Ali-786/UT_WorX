@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:ut_worx/constant/easyLoding.dart';
-import 'package:ut_worx/view/auth/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ut_worx/view/home_page.dart';
 import 'package:ut_worx/view/onboarding/onboarding_screen.dart';

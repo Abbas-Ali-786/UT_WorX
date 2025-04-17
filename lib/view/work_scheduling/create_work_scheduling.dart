@@ -1,18 +1,187 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../utils/resposive_design/responsive_layout.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+import 'package:ut_worx/constant/toaster.dart';
+import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 
-class WorkSchedulingDialog extends StatefulWidget {
-  const WorkSchedulingDialog({super.key});
+class CreateWorkScheduling extends StatefulWidget {
+  final Map<String, dynamic>? prefilledData;
+
+  const CreateWorkScheduling({
+    super.key,
+    this.prefilledData,
+  });
 
   @override
-  State<WorkSchedulingDialog> createState() => _WorkSchedulingDialogState();
+  State<CreateWorkScheduling> createState() => _CreateWorkSchedulingState();
 }
 
-class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
-  String id = '52369884';
-  String faultObservation = '';
-  String findings = '';
-  bool followUp = false;
+class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
+  // Form controllers
+  final TextEditingController _workOrderIdController = TextEditingController();
+  final TextEditingController _estimatedHoursController =
+      TextEditingController();
+
+  // Selected values
+  String? selectedTechnician;
+  DateTime? selectedDate;
+  TimeOfDay? selectedTime;
+
+  // Lists for dropdowns
+  final List<String> technicians = [
+    'John Doe',
+    'Jane Smith',
+    'Robert Johnson',
+    'Emily Davis',
+    'Michael Wilson'
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set default values
+    selectedDate = DateTime.now().add(const Duration(days: 1));
+    selectedTime = TimeOfDay.now();
+
+    // Prefill data if available
+    if (widget.prefilledData != null) {
+      _workOrderIdController.text = widget.prefilledData!['orderId'] ?? '';
+      // You can prefill other fields as needed
+    } else {
+      // Generate a unique ID if not prefilled
+      _workOrderIdController.text = const Uuid().v4().substring(0, 8);
+    }
+  }
+
+  @override
+  void dispose() {
+    _workOrderIdController.dispose();
+    _estimatedHoursController.dispose();
+    super.dispose();
+  }
+
+  // Function to submit work scheduling to Firebase
+  Future<void> _submitWorkScheduling() async {
+    // Validate inputs
+    if (_workOrderIdController.text.isEmpty) {
+      Toaster.showToast('Please enter a work order ID');
+      return;
+    }
+
+    if (selectedTechnician == null) {
+      Toaster.showToast('Please select a technician');
+      return;
+    }
+
+    if (selectedDate == null) {
+      Toaster.showToast('Please select a date');
+      return;
+    }
+
+    if (_estimatedHoursController.text.isEmpty) {
+      Toaster.showToast('Please enter estimated hours');
+      return;
+    }
+
+    // Show loading indicator
+    EasyLoading.show(status: 'Creating work schedule...');
+
+    try {
+      // Get current user ID
+      final String userId = FirebaseAuth.instance.currentUser?.uid ?? 'unknown';
+
+      // Create work scheduling data
+      final Map<String, dynamic> workSchedulingData = {
+        'workOrderId': _workOrderIdController.text,
+        'technicianAssigned': selectedTechnician,
+        'scheduledDate': Timestamp.fromDate(selectedDate!),
+        'estimatedHours': _estimatedHoursController.text,
+        'status': 'Scheduled', // Default status
+        'createdBy': userId,
+        'createdAt': FieldValue.serverTimestamp(),
+      };
+
+      // Save to Firebase
+      await FirebaseFirestore.instance
+          .collection('WorkScheduling')
+          .doc(_workOrderIdController.text)
+          .set(workSchedulingData);
+
+      // If this was created from a follow-up request, update the preliminary report
+      // if (widget.prefilledData != null &&
+      //     widget.prefilledData!['orderId'] != null) {
+      //   await FirebaseFirestore.instance
+      //       .collection('PreliminaryReports')
+      //       .doc(widget.prefilledData!['orderId'])
+      //       .update({'followUps': false, 'status': 'Scheduled'});
+      // }
+
+      // Hide loading indicator
+      EasyLoading.dismiss();
+
+      Toaster.showToast('Work schedule created successfully');
+
+      if (mounted) {
+        Navigator.of(context).pop(true); // Return true to indicate success
+      }
+    } catch (e) {
+      EasyLoading.dismiss();
+      Toaster.showToast('Error: ${e.toString()}');
+      debugPrint('Error creating work schedule: $e');
+    }
+  }
+
+  // Function to show date picker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0XFF7DBD2C),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
+  // Function to show time picker
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime ?? TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0XFF7DBD2C),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedTime) {
+      setState(() {
+        selectedTime = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +236,16 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Schedule Task',
+                    'Create Work Schedule',
                     style: TextStyle(
                         fontSize: titleFontSize, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: verticalSpacing * 2),
+
+                  // Work Order ID
                   Text(
-                    'ID',
+                    'Work Order ID',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: labelFontSize,
@@ -82,9 +253,11 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
-                    initialValue: id,
+                    controller: _workOrderIdController,
+                    readOnly: widget.prefilledData !=
+                        null, // Make it read-only if prefilled
                     decoration: InputDecoration(
-                      hintText: '52369884',
+                      hintText: 'Work Order ID',
                       hintStyle: TextStyle(color: Colors.grey),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -101,14 +274,10 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
                         ),
                       ),
                     ),
-                    onChanged: (newValue) {
-                      setState(() {
-                        id = newValue;
-                      });
-                    },
-                    autovalidateMode: AutovalidateMode.always,
                   ),
                   SizedBox(height: verticalSpacing),
+
+                  // Technician Assignment
                   Text(
                     'Assign Technician',
                     style: TextStyle(
@@ -117,60 +286,41 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0XFFE5E7EB)),
+                  DropdownButtonFormField<String>(
+                    value: selectedTechnician,
+                    decoration: InputDecoration(
+                      hintText: 'Select Technician',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Select',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_drop_down_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
+                    dropdownColor: Colors.white,
+                    icon: Icon(Icons.arrow_drop_down_outlined),
+                    isExpanded: true,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedTechnician = newValue;
+                      });
+                    },
+                    items: technicians
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
                   SizedBox(height: verticalSpacing),
-                  Text(
-                    'Spare Parts',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: labelFontSize,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0XFFE5E7EB)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Select',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_drop_down_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: verticalSpacing),
+
+                  // Schedule Date
                   Text(
                     'Schedule Date',
                     style: TextStyle(
@@ -179,30 +329,38 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0XFFE5E7EB)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Select',
-                            style: TextStyle(color: Colors.grey),
+                  InkWell(
+                    onTap: () => _selectDate(context),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0XFFE5E7EB)),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            selectedDate != null
+                                ? DateFormat('MMM dd, yyyy')
+                                    .format(selectedDate!)
+                                : 'Select Date',
+                            style: TextStyle(
+                              color: selectedDate != null
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.calendar_month_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
+                          Icon(Icons.calendar_today, color: Color(0XFF7DBD2C)),
+                        ],
+                      ),
                     ),
                   ),
-
                   SizedBox(height: verticalSpacing),
+
+                  // Estimated Hours
                   Text(
                     'Estimated Completion Hours',
                     style: TextStyle(
@@ -211,37 +369,32 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Color(0XFFE5E7EB)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            'Select',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.schedule_outlined),
-                          onPressed: () {},
-                        ),
-                      ],
+                  TextFormField(
+                    controller: _estimatedHoursController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      hintText: 'Enter hours',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                     ),
                   ),
-                  ///////
-
                   SizedBox(height: verticalSpacing * 2),
-                  // Use column for mobile, row for tablet and desktop
+
+                  // Buttons
                   responsive.isMobile
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            _buildSaveDraftButton(context, responsive),
+                            _buildCancelButton(context, responsive),
                             SizedBox(height: verticalSpacing),
                             _buildSubmitButton(context, responsive),
                           ],
@@ -250,8 +403,7 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                                child:
-                                    _buildSaveDraftButton(context, responsive)),
+                                child: _buildCancelButton(context, responsive)),
                             const SizedBox(width: 10),
                             Expanded(
                                 child: _buildSubmitButton(context, responsive)),
@@ -266,8 +418,7 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
     );
   }
 
-  Widget _buildSaveDraftButton(
-      BuildContext context, ResponsiveInfo responsive) {
+  Widget _buildCancelButton(BuildContext context, ResponsiveInfo responsive) {
     return ElevatedButton(
       onPressed: () {
         Navigator.of(context).pop();
@@ -306,8 +457,8 @@ class _WorkSchedulingDialogState extends State<WorkSchedulingDialog> {
 
   Widget _buildSubmitButton(BuildContext context, ResponsiveInfo responsive) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.of(context).pop();
+      onPressed: () async {
+        await _submitWorkScheduling();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0XFF7DBD2C),
