@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
+import 'package:ut_worx/constant/enums.dart';
 import 'package:uuid/uuid.dart';
 import 'package:ut_worx/constant/toaster.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
@@ -49,7 +50,7 @@ class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
 
     // Prefill data if available
     if (widget.prefilledData != null) {
-      _workOrderIdController.text = widget.prefilledData!['orderId'] ?? '';
+      _workOrderIdController.text = widget.prefilledData!['workOrderId'] ?? '';
       // You can prefill other fields as needed
     } else {
       // Generate a unique ID if not prefilled
@@ -99,6 +100,7 @@ class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
         'workOrderId': _workOrderIdController.text,
         'technicianAssigned': selectedTechnician,
         'scheduledDate': Timestamp.fromDate(selectedDate!),
+        'scheduledTime': _formatTimeWithAmPm(selectedTime!),
         'estimatedHours': _estimatedHoursController.text,
         'status': 'Scheduled', // Default status
         'createdBy': userId,
@@ -117,7 +119,7 @@ class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
       Toaster.showToast('Work schedule created successfully');
 
       if (mounted) {
-        Navigator.of(context).pop(true); // Return true to indicate success
+        Navigator.of(context).pop(true);
       }
     } catch (e) {
       EasyLoading.dismiss();
@@ -162,6 +164,15 @@ class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
             colorScheme: const ColorScheme.light(
               primary: Color(0XFF7DBD2C),
             ),
+            timePickerTheme: TimePickerThemeData(
+              backgroundColor: Colors.white,
+              hourMinuteShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              dayPeriodShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
           ),
           child: child!,
         );
@@ -172,6 +183,16 @@ class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
         selectedTime = picked;
       });
     }
+  }
+
+  // Helper method to format time with AM/PM
+  String _formatTimeWithAmPm(TimeOfDay time) {
+    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minute = time.minute
+        .toString()
+        .padLeft(2, '0'); // Ensure minutes have leading zero
+    final period = time.period == DayPeriod.am ? 'AM' : 'PM';
+    return '$hour:$minute $period';
   }
 
   @override
@@ -345,6 +366,45 @@ class _CreateWorkSchedulingState extends State<CreateWorkScheduling> {
                             ),
                           ),
                           Icon(Icons.calendar_today, color: Color(0XFF7DBD2C)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: verticalSpacing),
+
+                  // Time Selection
+                  Text(
+                    'Schedule Time',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: labelFontSize,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  InkWell(
+                    onTap: () => _selectTime(context),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0XFFE5E7EB)),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            selectedTime != null
+                                ? selectedTime!.format(context)
+                                : 'Select Time',
+                            style: TextStyle(
+                              color: selectedTime != null
+                                  ? Colors.black
+                                  : Colors.grey,
+                            ),
+                          ),
+                          Icon(Icons.access_time, color: Color(0XFF7DBD2C)),
                         ],
                       ),
                     ),

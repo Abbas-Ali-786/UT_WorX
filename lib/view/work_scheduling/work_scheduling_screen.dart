@@ -277,6 +277,15 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
                                     DataColumn(
                                       label: Expanded(
                                         child: Text(
+                                          'SCHEDULED TIME',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Expanded(
+                                        child: Text(
                                           'ESTIMATED HOURS',
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
@@ -302,6 +311,7 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
                                             ? _formatDate(data.scheduledDate)
                                             : 'Not scheduled',
                                       )),
+                                      DataCell(Text(data.scheduledTime)),
                                       DataCell(Text(data.estimatedHours)),
                                       DataCell(
                                         Container(

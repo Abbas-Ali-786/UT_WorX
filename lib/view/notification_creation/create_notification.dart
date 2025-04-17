@@ -17,6 +17,8 @@ class _NotificationDialogState extends State<NotificationDialog> {
   // Form controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _prelimFindingController =
+      TextEditingController();
   final TextEditingController _assetController = TextEditingController();
 
   // State variables
@@ -56,6 +58,10 @@ class _NotificationDialogState extends State<NotificationDialog> {
       Toaster.showToast('Please enter a description');
       return;
     }
+    if (_prelimFindingController.text.isEmpty) {
+      Toaster.showToast('Please enter a preliminary finding');
+      return;
+    }
 
     if (_assetController.text.isEmpty) {
       Toaster.showToast('Please select an asset');
@@ -87,6 +93,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         'orderId': orderId,
         'orderTitle': _titleController.text,
         'description': _descriptionController.text,
+        'prelimFinding': _prelimFindingController.text,
         'assetSelection': _assetController.text,
         'workCategory': workCategory,
         'priority': priority,
@@ -245,6 +252,46 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     ),
                     decoration: InputDecoration(
                       hintText: 'Please add description',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide:
+                              BorderSide(color: Color(0XFFE5E7EB), width: 1)),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: responsive.deviceValue(
+                          mobile: 8.0,
+                          tablet: 10.0,
+                          desktop: 12.0,
+                        ),
+                      ),
+                    ),
+                    autovalidateMode: AutovalidateMode.always,
+                  ),
+                  SizedBox(height: verticalSpacing),
+                  Text(
+                    'Prelim Finding',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: labelFontSize,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  TextFormField(
+                    controller: _prelimFindingController,
+                    maxLines: responsive.deviceValue(
+                      mobile: 2,
+                      tablet: 3,
+                      desktop: 3,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Please add prelim finding',
                       hintStyle: TextStyle(color: Colors.grey),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),

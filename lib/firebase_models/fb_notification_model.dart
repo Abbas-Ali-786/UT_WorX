@@ -4,6 +4,7 @@ class NotificationModel {
   final String orderId;
   final String orderTitle;
   final String description;
+  final String prelimFinding;
   final String assetSelection;
   final String workCategory;
   final String priority;
@@ -17,6 +18,7 @@ class NotificationModel {
     required this.orderId,
     required this.orderTitle,
     required this.description,
+    required this.prelimFinding,
     required this.assetSelection,
     required this.workCategory,
     required this.priority,
@@ -33,6 +35,7 @@ class NotificationModel {
       orderId: json['orderId'] ?? '',
       orderTitle: json['orderTitle'] ?? '',
       description: json['description'] ?? '',
+      prelimFinding: json['prelimFinding'] ?? '',
       assetSelection: json['assetSelection'] ?? '',
       workCategory: json['workCategory'] ?? '',
       priority: json['priority'] ?? '',
@@ -52,6 +55,7 @@ class NotificationModel {
       'orderId': orderId,
       'orderTitle': orderTitle,
       'description': description,
+      'prelimFinding': prelimFinding,
       'assetSelection': assetSelection,
       'workCategory': workCategory,
       'priority': priority,

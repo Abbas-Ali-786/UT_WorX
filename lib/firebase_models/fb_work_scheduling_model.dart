@@ -4,6 +4,7 @@ class WorkSchedulingModel {
   final String workOrderId;
   final String technicianAssigned;
   final DateTime scheduledDate;
+  final String scheduledTime;
   final String estimatedHours;
   final String status;
   final String? createdBy;
@@ -13,6 +14,7 @@ class WorkSchedulingModel {
     required this.workOrderId,
     required this.technicianAssigned,
     required this.scheduledDate,
+    required this.scheduledTime,
     required this.estimatedHours,
     required this.status,
     this.createdBy,
@@ -27,6 +29,7 @@ class WorkSchedulingModel {
       scheduledDate: json['scheduledDate'] != null
           ? (json['scheduledDate'] as Timestamp).toDate()
           : DateTime.now(),
+      scheduledTime: json['scheduledTime'] ?? '',
       estimatedHours: json['estimatedHours'] ?? '',
       status: json['status'] ?? 'Scheduled',
       createdBy: json['createdBy'],
@@ -42,6 +45,7 @@ class WorkSchedulingModel {
       'workOrderId': workOrderId,
       'technicianAssigned': technicianAssigned,
       'scheduledDate': scheduledDate,
+      'scheduledTime': scheduledTime,
       'estimatedHours': estimatedHours,
       'status': status,
       'createdBy': createdBy,

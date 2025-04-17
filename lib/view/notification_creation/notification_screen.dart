@@ -152,6 +152,7 @@ class NotificationTable extends StatelessWidget {
                       orderId: data['orderId'] ?? '',
                       orderTitle: data['orderTitle'] ?? '',
                       description: data['description'] ?? '',
+                      prelimFinding: data['prelimFinding'] ?? '',
                       assetSelection: data['assetSelection'] ?? '',
                       workCategory: data['workCategory'] ?? '',
                       createdBy: data['createdBy'] ?? '',
@@ -211,6 +212,14 @@ class NotificationTable extends StatelessWidget {
                             DataColumn(
                                 label: Expanded(
                               child: Text(
+                                'PRELIM FINDING',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Expanded(
+                              child: Text(
                                 'CREATED BY',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -238,6 +247,7 @@ class NotificationTable extends StatelessWidget {
                               DataCell(Text(data.orderId)),
                               DataCell(Text(data.orderTitle)),
                               DataCell(Text(data.assetSelection)),
+                              DataCell(Text(data.prelimFinding)),
                               DataCell(Text(data.createdBy)),
                               DataCell(
                                 Container(
