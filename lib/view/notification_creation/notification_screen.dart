@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ut_worx/firebase_models/fb_notification_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
+import 'package:ut_worx/utils/custom_widgets/custom_widgets.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/notification_creation/create_notification.dart';
 
@@ -213,14 +214,14 @@ class NotificationTable extends StatelessWidget {
                                 maxLines: 1,
                               ),
                             )),
-                            DataColumn(
-                                label: Expanded(
-                              child: Text(
-                                'PRELIM FINDING',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            )),
+                            // DataColumn(
+                            //     label: Expanded(
+                            //   child: Text(
+                            //     'PRELIM FINDING',
+                            //     overflow: TextOverflow.ellipsis,
+                            //     maxLines: 1,
+                            //   ),
+                            // )),
                             DataColumn(
                                 label: Expanded(
                               child: Text(
@@ -259,14 +260,14 @@ class NotificationTable extends StatelessWidget {
                               DataCell(Text(data.orderId)),
                               DataCell(Text(data.orderTitle)),
                               DataCell(Text(data.assetSelection)),
-                              DataCell(Text(data.prelimFinding)),
+                              // DataCell(Text(data.prelimFinding)),
                               DataCell(Text(data.createdBy)),
                               DataCell(
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: _getStatusColor(data.status),
+                                    color: getStatusColor(data.status),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -279,7 +280,7 @@ class NotificationTable extends StatelessWidget {
                                 Text(
                                   data.priority,
                                   style: TextStyle(
-                                      color: _getPriorityColor(data.priority)),
+                                      color: getPriorityColor(data.priority)),
                                 ),
                               ),
                               DataCell(
@@ -319,34 +320,6 @@ class NotificationTable extends StatelessWidget {
         ),
       );
     });
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'Completed':
-        return Colors.green.shade400;
-      case 'Pending':
-        return Colors.yellow.shade700;
-      case 'Rejected':
-        return Colors.red.shade400;
-      case 'OnHold':
-        return Colors.blue.shade400;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  Color _getPriorityColor(String priority) {
-    switch (priority) {
-      case 'High':
-        return Colors.red;
-      case 'Medium':
-        return Colors.orange;
-      case 'Low':
-        return Colors.green;
-      default:
-        return Colors.black;
-    }
   }
 
   void _showNotificationDetailsDialog(
@@ -410,7 +383,7 @@ class NotificationTable extends StatelessWidget {
                       SizedBox(height: 20),
 
                       // Order ID
-                      _buildDetailRow(
+                      buildDetailRow(
                         'Order ID:',
                         notification.orderId,
                         labelFontSize,
@@ -419,7 +392,7 @@ class NotificationTable extends StatelessWidget {
                       SizedBox(height: 10),
 
                       // Order Title
-                      _buildDetailRow(
+                      buildDetailRow(
                         'Order Title:',
                         notification.orderTitle,
                         labelFontSize,
@@ -428,7 +401,7 @@ class NotificationTable extends StatelessWidget {
                       SizedBox(height: 10),
 
                       // Description
-                      _buildDetailRow(
+                      buildDetailRow(
                         'Description:',
                         notification.description,
                         labelFontSize,
@@ -437,7 +410,7 @@ class NotificationTable extends StatelessWidget {
                       SizedBox(height: 10),
 
                       // Asset Selection
-                      _buildDetailRow(
+                      buildDetailRow(
                         'Asset Selection:',
                         notification.assetSelection,
                         labelFontSize,
@@ -446,7 +419,7 @@ class NotificationTable extends StatelessWidget {
                       SizedBox(height: 10),
 
                       // Work Category
-                      _buildDetailRow(
+                      buildDetailRow(
                         'Work Category:',
                         notification.workCategory,
                         labelFontSize,
@@ -470,7 +443,7 @@ class NotificationTable extends StatelessWidget {
                             notification.priority,
                             style: TextStyle(
                               fontSize: contentFontSize,
-                              color: _getPriorityColor(notification.priority),
+                              color: getPriorityColor(notification.priority),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -494,7 +467,7 @@ class NotificationTable extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: _getStatusColor(notification.status),
+                              color: getStatusColor(notification.status),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -532,7 +505,7 @@ class NotificationTable extends StatelessWidget {
                       SizedBox(height: 10),
 
                       // Created By
-                      _buildDetailRow(
+                      buildDetailRow(
                         'Created By:',
                         notification.createdBy,
                         labelFontSize,
@@ -541,10 +514,10 @@ class NotificationTable extends StatelessWidget {
                       SizedBox(height: 10),
 
                       // Created At
-                      _buildDetailRow(
+                      buildDetailRow(
                         'Created At:',
                         notification.createdAt != null
-                            ? _formatDateTime(notification.createdAt!)
+                            ? formatDateTime(notification.createdAt!)
                             : '',
                         labelFontSize,
                         contentFontSize,
@@ -637,36 +610,5 @@ class NotificationTable extends StatelessWidget {
         );
       },
     );
-  }
-
-  // Helper method to build detail rows
-  Widget _buildDetailRow(String label, String value, double labelFontSize,
-      double contentFontSize) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: labelFontSize,
-          ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            value,
-            style: TextStyle(
-              fontSize: contentFontSize,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Helper method to format DateTime
-  String _formatDateTime(DateTime dateTime) {
-    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 }

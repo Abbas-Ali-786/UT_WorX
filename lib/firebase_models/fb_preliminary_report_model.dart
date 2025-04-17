@@ -7,7 +7,10 @@ class PreliminaryReport {
   final String findings;
   bool followUps;
   final String createdBy;
+
   final DateTime? createdAt;
+  final String? imageData;
+  final String? imageName;
   final String status;
 
   PreliminaryReport({
@@ -18,6 +21,8 @@ class PreliminaryReport {
     required this.followUps,
     required this.createdBy,
     this.createdAt,
+    this.imageData,
+    this.imageName,
     required this.status,
   });
 
@@ -32,6 +37,8 @@ class PreliminaryReport {
       createdAt: json['createdAt'] != null
           ? (json['createdAt'] as Timestamp).toDate()
           : DateTime.now(),
+      imageData: json['imageData'],
+      imageName: json['imageName'],
       status: json['status'],
     );
   }
@@ -45,6 +52,8 @@ class PreliminaryReport {
       'followUps': followUps,
       'createdBy': createdBy,
       'createdAt': createdAt,
+      'imageData': imageData,
+      'imageName': imageName,
       'status': status,
     };
   }
