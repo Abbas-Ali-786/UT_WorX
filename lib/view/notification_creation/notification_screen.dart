@@ -241,6 +241,14 @@ class NotificationTable extends StatelessWidget {
                                 maxLines: 1,
                               ),
                             )),
+                            DataColumn(
+                                label: Expanded(
+                              child: Text(
+                                'ACTIONS',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            )),
                           ],
                           rows: notificationData.map((data) {
                             return DataRow(cells: [
@@ -268,6 +276,30 @@ class NotificationTable extends StatelessWidget {
                                   data.priority,
                                   style: TextStyle(
                                       color: _getPriorityColor(data.priority)),
+                                ),
+                              ),
+                              DataCell(
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _showNotificationDetailsDialog(
+                                        context, data);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0XFF7DBD2C),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
+                                    minimumSize: Size(60, 25),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'View',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ]);
@@ -311,5 +343,273 @@ class NotificationTable extends StatelessWidget {
       default:
         return Colors.black;
     }
+  }
+
+  void _showNotificationDetailsDialog(
+      BuildContext context, NotificationModel notification) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: ResponsiveLayout(
+            builder: (context, responsive) {
+              final dialogWidth = responsive.deviceValue(
+                mobile: 320.0,
+                tablet: 450.0,
+                desktop: 550.0,
+              );
+
+              final padding = responsive.deviceValue(
+                mobile: 16.0,
+                tablet: 20.0,
+                desktop: 24.0,
+              );
+
+              final titleFontSize = responsive.deviceValue(
+                mobile: 18.0,
+                tablet: 20.0,
+                desktop: 22.0,
+              );
+
+              final labelFontSize = responsive.deviceValue(
+                mobile: 14.0,
+                tablet: 15.0,
+                desktop: 16.0,
+              );
+
+              final contentFontSize = responsive.deviceValue(
+                mobile: 13.0,
+                tablet: 14.0,
+                desktop: 15.0,
+              );
+
+              return Container(
+                width: dialogWidth,
+                padding: EdgeInsets.all(padding),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Notification Details',
+                          style: TextStyle(
+                            fontSize: titleFontSize,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+
+                      // Order ID
+                      _buildDetailRow(
+                        'Order ID:',
+                        notification.orderId,
+                        labelFontSize,
+                        contentFontSize,
+                      ),
+                      SizedBox(height: 10),
+
+                      // Order Title
+                      _buildDetailRow(
+                        'Order Title:',
+                        notification.orderTitle,
+                        labelFontSize,
+                        contentFontSize,
+                      ),
+                      SizedBox(height: 10),
+
+                      // Description
+                      _buildDetailRow(
+                        'Description:',
+                        notification.description,
+                        labelFontSize,
+                        contentFontSize,
+                      ),
+                      SizedBox(height: 10),
+
+                      // Asset Selection
+                      _buildDetailRow(
+                        'Asset Selection:',
+                        notification.assetSelection,
+                        labelFontSize,
+                        contentFontSize,
+                      ),
+                      SizedBox(height: 10),
+
+                      // Work Category
+                      _buildDetailRow(
+                        'Work Category:',
+                        notification.workCategory,
+                        labelFontSize,
+                        contentFontSize,
+                      ),
+                      SizedBox(height: 10),
+
+                      // Priority
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Priority:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: labelFontSize,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            notification.priority,
+                            style: TextStyle(
+                              fontSize: contentFontSize,
+                              color: _getPriorityColor(notification.priority),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+
+                      // Status
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Status:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: labelFontSize,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: _getStatusColor(notification.status),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              notification.status,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: contentFontSize,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+
+                      // Breakdown/Bypass
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Breakdown/Bypass:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: labelFontSize,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            notification.breakdownBypass ? 'Yes' : 'No',
+                            style: TextStyle(
+                              fontSize: contentFontSize,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+
+                      // Created By
+                      _buildDetailRow(
+                        'Created By:',
+                        notification.createdBy,
+                        labelFontSize,
+                        contentFontSize,
+                      ),
+                      SizedBox(height: 10),
+
+                      // Created At
+                      _buildDetailRow(
+                        'Created At:',
+                        notification.createdAt != null
+                            ? _formatDateTime(notification.createdAt!)
+                            : '',
+                        labelFontSize,
+                        contentFontSize,
+                      ),
+
+                      SizedBox(height: 20),
+
+                      // Close button
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0XFF7DBD2C),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            'Close',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: contentFontSize,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  // Helper method to build detail rows
+  Widget _buildDetailRow(String label, String value, double labelFontSize,
+      double contentFontSize) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: labelFontSize,
+          ),
+        ),
+        SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: contentFontSize,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper method to format DateTime
+  String _formatDateTime(DateTime dateTime) {
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 }
