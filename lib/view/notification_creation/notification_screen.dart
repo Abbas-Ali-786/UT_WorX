@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ut_worx/firebase_models/fb_notification_model.dart';
@@ -160,6 +162,8 @@ class NotificationTable extends StatelessWidget {
                       priority: data['priority'] ?? '',
                       breakdownBypass: data['breakdownBypass'] ?? '',
                       createdAt: createdAt,
+                      imageData: data['imageData'] ?? '',
+                      imageName: data['imageName'] ?? '',
                     );
                   }).toList();
 
@@ -545,6 +549,59 @@ class NotificationTable extends StatelessWidget {
                         labelFontSize,
                         contentFontSize,
                       ),
+
+                      SizedBox(height: 20),
+
+                      // Image Section - Add this new section
+                      if (notification.imageData != null &&
+                          notification.imageData!.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Attachment:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: labelFontSize,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Center(
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  maxHeight: 200,
+                                  maxWidth: dialogWidth * 0.8,
+                                ),
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.memory(
+                                    base64Decode(notification.imageData!),
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (notification.imageName != null &&
+                                notification.imageName!.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Center(
+                                  child: Text(
+                                    notification.imageName!,
+                                    style: TextStyle(
+                                      fontSize: contentFontSize * 0.9,
+                                      color: Colors.grey.shade700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
 
                       SizedBox(height: 20),
 

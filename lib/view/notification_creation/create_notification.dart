@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import '../../utils/resposive_design/responsive_layout.dart';
 import '../../constant/toaster.dart';
@@ -37,6 +42,12 @@ class _NotificationDialogState extends State<NotificationDialog> {
 
   // Priority options
   final List<String> priorities = ['Low', 'Medium', 'High', 'Critical'];
+
+  // Add these variables
+  final ImagePicker _picker = ImagePicker();
+  String? _base64Image;
+  String? _imageName;
+  bool _isImageSelected = false;
 
   @override
   void dispose() {
@@ -100,19 +111,25 @@ class _NotificationDialogState extends State<NotificationDialog> {
         'breakdownBypass': breakdownBypass,
         'createdBy': userEmail,
         'createdAt': FieldValue.serverTimestamp(),
-        'status': 'Pending',
+        'status': 'Pending', // Default status
+        // Add the base64 image if available
+        'imageData': _base64Image,
+        'imageName': _imageName,
       };
 
-      // create preliminary report data
+      // Create preliminary report data
       final Map<String, dynamic> preliminaryReportData = {
         'orderId': orderId,
         'orderTitle': _titleController.text,
+        'findings': _prelimFindingController.text,
         'assetSelection': _assetController.text,
-        'findings': '',
         'followUps': false,
         'createdBy': userEmail,
         'createdAt': FieldValue.serverTimestamp(),
-        'status': 'Pending',
+        'status': 'Pending', // Default status
+        // Add the base64 image if available
+        'imageData': _base64Image,
+        'imageName': _imageName,
       };
 
       // Save to Firebase
@@ -138,6 +155,75 @@ class _NotificationDialogState extends State<NotificationDialog> {
       EasyLoading.dismiss();
       Toaster.showToast('Error: ${e.toString()}');
       debugPrint('Error creating notification: $e');
+    }
+  }
+
+  // Method to show image source selection dialog
+  Future<void> _showImageSourceDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Image Source'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                  child: Text('Gallery'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    _getImage(ImageSource.gallery);
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(8.0)),
+                GestureDetector(
+                  child: Text('Camera'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    _getImage(ImageSource.camera);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Method to pick image from gallery or camera
+  Future<void> _getImage(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+
+      if (pickedFile != null) {
+        if (kIsWeb) {
+          // Web platform handling
+          final bytes = await pickedFile.readAsBytes();
+          final base64String = base64Encode(bytes);
+          setState(() {
+            _base64Image = base64String;
+            _imageName = pickedFile.name;
+            _isImageSelected = true;
+          });
+        } else {
+          // Mobile platform handling
+          final bytes = await File(pickedFile.path).readAsBytes();
+          final base64String = base64Encode(bytes);
+          setState(() {
+            _base64Image = base64String;
+            _imageName = pickedFile.name;
+            _isImageSelected = true;
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
+      Toaster.showToast('Error selecting image: $e');
     }
   }
 
@@ -362,17 +448,21 @@ class _NotificationDialogState extends State<NotificationDialog> {
                     ),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'Upload',
-                            style: TextStyle(color: Colors.grey),
+                            _isImageSelected
+                                ? _imageName ?? 'Image selected'
+                                : 'Upload',
+                            style: TextStyle(
+                              color:
+                                  _isImageSelected ? Colors.black : Colors.grey,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.cloud_upload_outlined),
-                          onPressed: () {
-                            // File upload functionality would go here
-                          },
+                          onPressed: _showImageSourceDialog,
                         ),
                       ],
                     ),

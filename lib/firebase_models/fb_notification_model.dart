@@ -12,6 +12,8 @@ class NotificationModel {
   final String? attachmentUrl;
   final String createdBy;
   final DateTime? createdAt;
+  final String? imageData;
+  final String? imageName;
   final String status;
 
   NotificationModel({
@@ -26,6 +28,8 @@ class NotificationModel {
     this.attachmentUrl,
     required this.createdBy,
     this.createdAt,
+    this.imageData,
+    this.imageName,
     required this.status,
   });
 
@@ -45,6 +49,8 @@ class NotificationModel {
       createdAt: json['createdAt'] != null
           ? (json['createdAt'] as Timestamp).toDate()
           : DateTime.now(),
+      imageData: json['imageData'],
+      imageName: json['imageName'],
       status: json['status'],
     );
   }
@@ -63,6 +69,8 @@ class NotificationModel {
       'attachmentUrl': attachmentUrl,
       'createdBy': createdBy,
       'createdAt': createdAt,
+      'imageData': imageData,
+      'imageName': imageName,
       'status': status,
     };
   }
