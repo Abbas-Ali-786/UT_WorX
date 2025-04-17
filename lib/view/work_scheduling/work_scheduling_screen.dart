@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ut_worx/firebase_models/fb_work_scheduling_model.dart';
 import 'package:ut_worx/utils/custom_widgets/custom_drawer.dart';
+import 'package:ut_worx/utils/custom_widgets/custom_widgets.dart';
 import 'package:ut_worx/utils/resposive_design/responsive_layout.dart';
 import 'package:ut_worx/view/work_scheduling/create_work_scheduling.dart';
 
@@ -318,7 +319,7 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: _getStatusColor(data.status),
+                                            color: getStatusColor(data.status),
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                           ),
@@ -350,21 +351,6 @@ class _WorkSchedulingScreenState extends State<WorkSchedulingScreen> {
 
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'Completed':
-        return Colors.green;
-      case 'Scheduled':
-        return Colors.blue;
-      case 'In Progress':
-        return Colors.orange;
-      case 'Delayed':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
   }
 
   void _showFollowUpRequestsDialog(BuildContext context) {
